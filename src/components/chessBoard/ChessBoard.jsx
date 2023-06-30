@@ -5,8 +5,6 @@ import Tile from "../tiles/Tile";
 const horixontalAxis = ["a", "b", "c", "d", "e", "f", "g", "h"];
 const verticalAxis = ["1", "2", "3", "4", "5", "6", "7", "8"];
 
-var i = 0;
-
 const pieces = [];
 
 for (let j = 0; j < 8; j++) {
@@ -26,6 +24,33 @@ for (let p = 0; p < 2; p++) {
   pieces.push({ image: `assets/image/${type}_rook.png`, x: x, y: 7 });
   pieces.push({ image: `assets/image/${type}_bishop.png`, x: x, y: 6 });
 }
+
+let activePiece = null;
+function getPiece(e) {
+  const element = e.target;
+  if (element.classList.contains("chess-piece")) {
+    activePiece = element;
+  }
+}
+function movePiece(e) {
+  // const element = e.target;
+  if (activePiece) {
+    const x = e.clientX - 50;
+    const y = e.clientY - 50;
+    activePiece.style.position = "absolute";
+    // console.log(element.style.postion);
+    activePiece.style.left = `${x}px`;
+    activePiece.style.top = `${y}px`;
+    // console.log(element.style.left);
+  }
+}
+
+function dropPiece(e) {
+  if (activePiece) {
+    activePiece = null;
+  }
+}
+
 function ChessBoard() {
   let board = [];
   verticalAxis
@@ -43,12 +68,27 @@ function ChessBoard() {
           }
         });
         board.push(
-          <Tile xindex={xindex} yindex={yindex} number={num} image={image} />
+          <Tile
+            xindex={xindex}
+            yindex={yindex}
+            key={`${xindex}, ${yindex}`}
+            number={num}
+            image={image}
+          />
         );
       });
     });
 
-  return <div className="chessboard">{board}</div>;
+  return (
+    <div
+      onMouseMove={(e) => movePiece(e)}
+      onMouseDown={(e) => getPiece(e)}
+      onMouseUp={(e) => dropPiece(e)}
+      className="chessboard"
+    >
+      {board}
+    </div>
+  );
 }
 
 export default ChessBoard;
