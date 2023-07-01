@@ -2,6 +2,7 @@ import "./Tile.css";
 import React from "react";
 
 function Tile({ number, image, xindex, yindex }) {
+  // setting classname acording to the piece color
   const className = [
     "tile",
     number % 2 === 0 && "black-tile",
