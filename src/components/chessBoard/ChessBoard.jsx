@@ -176,7 +176,15 @@ function ChessBoard() {
         const pieces = value.map((p) => {
           // console.log(newx, newy, x, y, p.x, p.y);
           if (p.x === y && p.y === x) {
-            const valid = referee.isValidMove(x, y, newx, newy, p.type, p.team);
+            const valid = referee.isValidMove(
+              x,
+              y,
+              newx,
+              newy,
+              p.type,
+              p.team,
+              value
+            );
 
             if (valid) {
               p.x = newy;

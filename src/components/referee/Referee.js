@@ -2,21 +2,33 @@ import { PieceType } from "../chessBoard/ChessBoard";
 import { Team } from "../chessBoard/ChessBoard";
 
 export default class Referee {
-  isValidMove(px, py, x, y, type, team) {
+  titleIsOccupied(x, y, boardState) {
+    console.log("checing if title is occupied.....");
+    const piece = boardState.find((p) => p.x === x && p.y === y);
+    if (piece) {
+      return true;
+    }
+    return false;
+  }
+
+  isValidMove(px, py, x, y, type, team, boardState) {
     console.log("refereee is checking the move....");
-    console.log(px, py, x, y, type, team);
+    // console.log(px, py, x, y, type, team);
 
     if (type === PieceType.PAWN) {
-      if (team === Team.BLACK) {
-        if (py == 1) {
-          if (px == x && (y - py === 1 || y - py === 2)) {
-            // console.log("valid move");
-            return true;
-          }
-        } else {
-          if (px === x && y - py === 1) {
-            return true;
-          }
+      const specialRow = team === Team.BLACK ? 1 : 6;
+      const pawnDirection = team === Team.BLACK ? 1 : -1;
+
+      if (px === x && py === specialRow && y - py === 2 * pawnDirection) {
+        if (
+          !this.titleIsOccupied(y, x, boardState) &&
+          !this.titleIsOccupied(y - pawnDirection, x, boardState)
+        ) {
+          return true;
+        }
+      } else if (px === x && y - py === pawnDirection) {
+        if (!this.titleIsOccupied(y, x, boardState)) {
+          return true;
         }
       }
     }
