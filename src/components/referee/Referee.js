@@ -1,5 +1,5 @@
 import { PieceType } from "../chessBoard/ChessBoard";
-import { Team } from "../chessBoard/ChessBoard";
+import { TeamType } from "../chessBoard/ChessBoard";
 
 export default class Referee {
   titleIsOccupied(x, y, boardState) {
@@ -11,23 +11,49 @@ export default class Referee {
     return false;
   }
 
+  titleIsOccupiedByOpponent(x, y, boardState, team) {
+    const piece = boardState.find(
+      (p) => p.x === x && p.y === y && p.team !== team
+    );
+
+    if (piece) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
   isValidMove(px, py, x, y, type, team, boardState) {
     console.log("refereee is checking the move....");
-    // console.log(px, py, x, y, type, team);
-
+    // MOVEMENT LOGIC
+    // console.log(type, team);
     if (type === PieceType.PAWN) {
-      const specialRow = team === Team.BLACK ? 1 : 6;
-      const pawnDirection = team === Team.BLACK ? 1 : -1;
+      const specialRow = team === TeamType.OUR ? 1 : 6;
+      const pawnDirection = team === TeamType.OUR ? 1 : -1;
+      // console.log(specialRow, pawnDirection);
 
       if (px === x && py === specialRow && y - py === 2 * pawnDirection) {
         if (
-          !this.titleIsOccupied(y, x, boardState) &&
-          !this.titleIsOccupied(y - pawnDirection, x, boardState)
+          !this.titleIsOccupied(x, y, boardState) &&
+          !this.titleIsOccupied(x, y - pawnDirection, boardState)
         ) {
           return true;
         }
       } else if (px === x && y - py === pawnDirection) {
-        if (!this.titleIsOccupied(y, x, boardState)) {
+        if (!this.titleIsOccupied(x, y, boardState)) {
+          return true;
+        }
+      }
+
+      // ATTACK LOGIC
+      else if (x - px === -1 && y - py === pawnDirection) {
+        if (this.titleIsOccupiedByOpponent(x, y, boardState, team)) {
+          console.log("you can attack");
+          return true;
+        }
+      } else if (x - px === 1 && y - py === pawnDirection) {
+        if (this.titleIsOccupiedByOpponent(x, y, boardState, team)) {
+          console.log("you can attack");
           return true;
         }
       }
