@@ -93,6 +93,7 @@ for (let i = 0; i < 8; i++) {
     y: 6,
     type: PieceType.PAWN,
     team: TeamType.OPPONENT,
+    enPassant: false,
   });
 }
 for (let i = 0; i < 8; i++) {
@@ -102,6 +103,7 @@ for (let i = 0; i < 8; i++) {
     y: 1,
     type: PieceType.PAWN,
     team: TeamType.OUR,
+    enPassant: false,
   });
 }
 
@@ -193,15 +195,51 @@ function ChessBoard() {
           pieces
         );
 
-        if (validMove) {
+        const isEnPassantMove = referee.isEnPassantMove(
+          gridX,
+          gridY,
+          x,
+          y,
+          currentPiece.type,
+          currentPiece.team,
+          pieces
+        );
+        const pawnDirection = currentPiece.team === TeamType.OUR ? 1 : -1;
+
+        if (isEnPassantMove) {
+          const updatePieces = pieces.reduce((result, piece) => {
+            if (piece.x === gridX && piece.y === gridY) {
+              piece.enPassant = false;
+              piece.x = x;
+              piece.y = y;
+              result.push(piece);
+            } else if (!(piece.x === x && piece.y === y - pawnDirection)) {
+              if (piece.type === PieceType.PAWN) {
+                piece.enPassant = false;
+              }
+              result.push(piece);
+            }
+            return result;
+          }, []);
+
+          setPieces(updatePieces);
+        } else if (validMove) {
           const updatedPieces = pieces.reduce((result, piece) => {
-            if (piece.x === currentPiece.x && piece.y === currentPiece.y) {
+            if (piece.x === gridX && piece.y === gridY) {
+              if (Math.abs(gridY - y) === 2 && piece.type === PieceType.PAWN) {
+                piece.enPassant = true;
+              } else {
+                piece.enPassant = false;
+              }
               piece.x = x;
               piece.y = y;
               // console.log(x, y, x, y, piece.x, piece.y);
               result.push(piece);
               // console.log(piece);
             } else if (!(piece.x === x && piece.y === y)) {
+              if (piece.type === PieceType.PAWN) {
+                piece.enPassant = false;
+              }
               result.push(piece);
             }
             return result;
