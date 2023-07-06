@@ -2,6 +2,9 @@ export const horixontalAxis = ["a", "b", "c", "d", "e", "f", "g", "h"];
 export const verticalAxis = ["1", "2", "3", "4", "5", "6", "7", "8"];
 
 export const Grid_size = 75;
+export function samePosition(p1, p2) {
+  return p1.x === p2.x && p1.y === p2.y;
+}
 export const PieceType = {
   PAWN: 0,
   BISHOP: 1,

@@ -8,6 +8,7 @@ import {
   horixontalAxis,
   verticalAxis,
   initialBoardState,
+  samePosition,
 } from "../../constant";
 
 function ChessBoard() {
@@ -81,9 +82,8 @@ function ChessBoard() {
         Math.ceil((e.clientY - chessboard.offsetTop - 600) / 75)
       );
 
-      const currentPiece = pieces.find(
-        (p) =>
-          p.position.x === grabPosition.x && p.position.y === grabPosition.y
+      const currentPiece = pieces.find((p) =>
+        samePosition(p.position, grabPosition)
       );
 
       if (currentPiece) {
@@ -107,18 +107,13 @@ function ChessBoard() {
 
         if (isEnPassantMove) {
           const updatePieces = pieces.reduce((result, piece) => {
-            if (
-              piece.position.x === grabPosition.x &&
-              piece.position.y === grabPosition.y
-            ) {
+            if (samePosition(piece.position, grabPosition)) {
               piece.enPassant = false;
               piece.position.x = x;
               piece.position.y = y;
               result.push(piece);
             } else if (
-              !(
-                piece.position.x === x && piece.position.y === y - pawnDirection
-              )
+              !samePosition(piece.position, { x: x, y: y - pawnDirection })
             ) {
               if (piece.type === PieceType.PAWN) {
                 piece.enPassant = false;
@@ -130,10 +125,7 @@ function ChessBoard() {
           setPieces(updatePieces);
         } else if (validMove) {
           const updatedPieces = pieces.reduce((result, piece) => {
-            if (
-              piece.position.x === grabPosition.x &&
-              piece.position.y === grabPosition.y
-            ) {
+            if (samePosition(piece.position, grabPosition)) {
               if (
                 Math.abs(grabPosition.y - y) === 2 &&
                 piece.type === PieceType.PAWN
@@ -146,7 +138,7 @@ function ChessBoard() {
               piece.position.y = y;
 
               result.push(piece);
-            } else if (!(piece.position.x === x && piece.position.y === y)) {
+            } else if (!samePosition(piece.position, { x: x, y: y })) {
               if (piece.type === PieceType.PAWN) {
                 piece.enPassant = false;
               }
