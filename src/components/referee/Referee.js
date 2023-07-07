@@ -129,44 +129,98 @@ export default class Referee {
           }
         }
       }
-    } else if (type === PieceType.BISHOP) {
+    }
+
+    // BISHOP MOVEMENT LOGIC
+    else if (type === PieceType.BISHOP) {
       for (let i = 1; i < 8; i++) {
+        //  MOVING TOP RIGHT
+        if (
+          desiredPosition.x > initialPosition.x &&
+          desiredPosition.y > initialPosition.y
+        ) {
+          let passPostion = {
+            x: initialPosition.x + i,
+            y: initialPosition.y + i,
+          };
+
+          if (this.titleIsOccupied(passPostion, boardState)) {
+            break;
+          }
+        }
+
         if (
           desiredPosition.x - initialPosition.x === i &&
           desiredPosition.y - initialPosition.y === i
         ) {
-          console.log("moving up right ", { i });
-          break;
+          console.log("moving top  right ", { i });
+          return true;
         }
-      }
 
-      for (let i = 1; i < 8; i++) {
+        // MOVING DOWN RIGHT
+        if (
+          desiredPosition.x > initialPosition.x &&
+          desiredPosition.y < initialPosition.y
+        ) {
+          let passPostion = {
+            x: initialPosition.x + i,
+            y: initialPosition.y - i,
+          };
+
+          if (this.titleIsOccupied(passPostion, boardState)) {
+            break;
+          }
+        }
         if (
           desiredPosition.x - initialPosition.x === i &&
           desiredPosition.y - initialPosition.y === -i
         ) {
           console.log("moving down right ", { i });
-          break;
+          return true;
         }
-      }
 
-      for (let i = 1; i < 8; i++) {
+        // MOVING BOTTOM LEFT
+        if (
+          desiredPosition.x < initialPosition.x &&
+          desiredPosition.y < initialPosition
+        ) {
+          let passPostion = {
+            x: initialPosition.x - i,
+            y: initialPosition.y - i,
+          };
+
+          if (this.titleIsOccupied(passPostion, boardState)) {
+            break;
+          }
+        }
         if (
           desiredPosition.x - initialPosition.x === -i &&
           desiredPosition.y - initialPosition.y === -i
         ) {
           console.log("moving down left ", { i });
-          break;
+          return true;
         }
-      }
 
-      for (let i = 1; i < 8; i++) {
+        //MOVING TOP LEFT
+        if (
+          desiredPosition.x < initialPosition.x &&
+          desiredPosition.y > initialPosition.y
+        ) {
+          let passPostion = {
+            x: initialPosition.x - i,
+            y: initialPosition.y + i,
+          };
+
+          if (this.titleIsOccupied(passPostion, boardState)) {
+            break;
+          }
+        }
         if (
           desiredPosition.x - initialPosition.x === -i &&
           desiredPosition.y - initialPosition.y === i
         ) {
           console.log("moving top left ", { i });
-          break;
+          return true;
         }
       }
     }
