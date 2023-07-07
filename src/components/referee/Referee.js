@@ -144,17 +144,27 @@ export default class Referee {
             y: initialPosition.y + i,
           };
 
-          if (this.titleIsOccupied(passPostion, boardState)) {
-            break;
+          // checkng if the move is valid for bishop
+          if (
+            passPostion.x === desiredPosition.x &&
+            passPostion.y === desiredPosition.y
+          ) {
+            // checking if empty or occupied by opponet
+            if (
+              this.titleIsEmptyOrOccupiedByOpponent(
+                passPostion,
+                boardState,
+                team
+              )
+            ) {
+              return true;
+            }
+          } else {
+            // checking the pass tile beach mai koi piece toh nhi
+            if (this.titleIsOccupied(passPostion, boardState)) {
+              break;
+            }
           }
-        }
-
-        if (
-          desiredPosition.x - initialPosition.x === i &&
-          desiredPosition.y - initialPosition.y === i
-        ) {
-          console.log("moving top  right ", { i });
-          return true;
         }
 
         // MOVING DOWN RIGHT
@@ -167,38 +177,60 @@ export default class Referee {
             y: initialPosition.y - i,
           };
 
-          if (this.titleIsOccupied(passPostion, boardState)) {
-            break;
+          // checkng if the move is valid for bishop
+          if (
+            passPostion.x === desiredPosition.x &&
+            passPostion.y === desiredPosition.y
+          ) {
+            // checking if empty or occupied by opponet
+            if (
+              this.titleIsEmptyOrOccupiedByOpponent(
+                passPostion,
+                boardState,
+                team
+              )
+            ) {
+              return true;
+            }
+          } else {
+            // checking the pass tile beach mai koi piece toh nhi
+            if (this.titleIsOccupied(passPostion, boardState)) {
+              break;
+            }
           }
-        }
-        if (
-          desiredPosition.x - initialPosition.x === i &&
-          desiredPosition.y - initialPosition.y === -i
-        ) {
-          console.log("moving down right ", { i });
-          return true;
         }
 
         // MOVING BOTTOM LEFT
         if (
           desiredPosition.x < initialPosition.x &&
-          desiredPosition.y < initialPosition
+          desiredPosition.y < initialPosition.y
         ) {
           let passPostion = {
             x: initialPosition.x - i,
             y: initialPosition.y - i,
           };
 
-          if (this.titleIsOccupied(passPostion, boardState)) {
-            break;
+          // checkng if the move is valid for bishop
+          if (
+            passPostion.x === desiredPosition.x &&
+            passPostion.y === desiredPosition.y
+          ) {
+            // checking if empty or occupied by opponet
+            if (
+              this.titleIsEmptyOrOccupiedByOpponent(
+                passPostion,
+                boardState,
+                team
+              )
+            ) {
+              return true;
+            }
+          } else {
+            // checking the pass tile beach mai koi piece toh nhi
+            if (this.titleIsOccupied(passPostion, boardState)) {
+              break;
+            }
           }
-        }
-        if (
-          desiredPosition.x - initialPosition.x === -i &&
-          desiredPosition.y - initialPosition.y === -i
-        ) {
-          console.log("moving down left ", { i });
-          return true;
         }
 
         //MOVING TOP LEFT
@@ -211,16 +243,27 @@ export default class Referee {
             y: initialPosition.y + i,
           };
 
-          if (this.titleIsOccupied(passPostion, boardState)) {
-            break;
+          // checkng if the move is valid for bishop
+          if (
+            passPostion.x === desiredPosition.x &&
+            passPostion.y === desiredPosition.y
+          ) {
+            // checking if empty or occupied by opponet
+            if (
+              this.titleIsEmptyOrOccupiedByOpponent(
+                passPostion,
+                boardState,
+                team
+              )
+            ) {
+              return true;
+            }
+          } else {
+            // checking the pass tile beach mai koi piece toh nhi
+            if (this.titleIsOccupied(passPostion, boardState)) {
+              break;
+            }
           }
-        }
-        if (
-          desiredPosition.x - initialPosition.x === -i &&
-          desiredPosition.y - initialPosition.y === i
-        ) {
-          console.log("moving top left ", { i });
-          return true;
         }
       }
     }
