@@ -29,7 +29,7 @@ export default class Referee {
     }
   }
 
-  //FOR PAWNS
+  //FOR PAWNS MOVEMENT
   isEnPassantMove(initialPosition, desiredPosition, type, team, boardState) {
     const pawnDirection = team === TeamType.OUR ? 1 : -1;
     if (type === PieceType.PAWN) {
@@ -127,6 +127,46 @@ export default class Referee {
               }
             }
           }
+        }
+      }
+    } else if (type === PieceType.BISHOP) {
+      for (let i = 1; i < 8; i++) {
+        if (
+          desiredPosition.x - initialPosition.x === i &&
+          desiredPosition.y - initialPosition.y === i
+        ) {
+          console.log("moving up right ", { i });
+          break;
+        }
+      }
+
+      for (let i = 1; i < 8; i++) {
+        if (
+          desiredPosition.x - initialPosition.x === i &&
+          desiredPosition.y - initialPosition.y === -i
+        ) {
+          console.log("moving down right ", { i });
+          break;
+        }
+      }
+
+      for (let i = 1; i < 8; i++) {
+        if (
+          desiredPosition.x - initialPosition.x === -i &&
+          desiredPosition.y - initialPosition.y === -i
+        ) {
+          console.log("moving down left ", { i });
+          break;
+        }
+      }
+
+      for (let i = 1; i < 8; i++) {
+        if (
+          desiredPosition.x - initialPosition.x === -i &&
+          desiredPosition.y - initialPosition.y === i
+        ) {
+          console.log("moving top left ", { i });
+          break;
         }
       }
     }
