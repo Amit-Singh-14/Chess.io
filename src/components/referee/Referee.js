@@ -2,10 +2,7 @@ import { PieceType, TeamType, samePosition } from "../../constant";
 
 export default class Referee {
   titleIsEmptyOrOccupiedByOpponent(position, boardState, team) {
-    return (
-      !this.titleIsOccupied(position, boardState) ||
-      this.titleIsOccupiedByOpponent(position, boardState, team)
-    );
+    return !this.titleIsOccupied(position, boardState) || this.titleIsOccupiedByOpponent(position, boardState, team);
   }
 
   titleIsOccupied(position, boardState) {
@@ -18,9 +15,7 @@ export default class Referee {
   }
 
   titleIsOccupiedByOpponent(position, boardState, team) {
-    const piece = boardState.find(
-      (p) => samePosition(p.position, position) && p.team !== team
-    );
+    const piece = boardState.find((p) => samePosition(p.position, position) && p.team !== team);
 
     if (piece) {
       return true;
@@ -34,15 +29,11 @@ export default class Referee {
     const pawnDirection = team === TeamType.OUR ? 1 : -1;
     if (type === PieceType.PAWN) {
       if (
-        (desiredPosition.x - initialPosition.x === -1 ||
-          desiredPosition.x - initialPosition.x === 1) &&
+        (desiredPosition.x - initialPosition.x === -1 || desiredPosition.x - initialPosition.x === 1) &&
         desiredPosition.y - initialPosition.y === pawnDirection
       ) {
         const piece = boardState.find(
-          (p) =>
-            p.position.x === desiredPosition.x &&
-            p.position.y === desiredPosition.y - pawnDirection &&
-            p.enPassant
+          (p) => p.position.x === desiredPosition.x && p.position.y === desiredPosition.y - pawnDirection && p.enPassant
         );
         if (piece) {
           return true;
@@ -64,17 +55,11 @@ export default class Referee {
     ) {
       if (
         !this.titleIsOccupied(desiredPosition, boardState) &&
-        !this.titleIsOccupied(
-          { x: desiredPosition.x, y: desiredPosition.y - pawnDirection },
-          boardState
-        )
+        !this.titleIsOccupied({ x: desiredPosition.x, y: desiredPosition.y - pawnDirection }, boardState)
       ) {
         return true;
       }
-    } else if (
-      initialPosition.x === desiredPosition.x &&
-      desiredPosition.y - initialPosition.y === pawnDirection
-    ) {
+    } else if (initialPosition.x === desiredPosition.x && desiredPosition.y - initialPosition.y === pawnDirection) {
       if (!this.titleIsOccupied(desiredPosition, boardState)) {
         return true;
       }
@@ -82,8 +67,7 @@ export default class Referee {
 
     // ATTACK LOGIC
     else if (
-      (desiredPosition.x - initialPosition.x === -1 ||
-        desiredPosition.x - initialPosition.x === 1) &&
+      (desiredPosition.x - initialPosition.x === -1 || desiredPosition.x - initialPosition.x === 1) &&
       desiredPosition.y - initialPosition.y === pawnDirection
     ) {
       if (this.titleIsOccupiedByOpponent(desiredPosition, boardState, team)) {
@@ -101,13 +85,7 @@ export default class Referee {
         // TOP AND BOTTOM SIDE MOVEMENT
         if (desiredPosition.y - initialPosition.y === 2 * i) {
           if (desiredPosition.x - initialPosition.x === j) {
-            if (
-              this.titleIsEmptyOrOccupiedByOpponent(
-                desiredPosition,
-                boardState,
-                team
-              )
-            ) {
+            if (this.titleIsEmptyOrOccupiedByOpponent(desiredPosition, boardState, team)) {
               return true;
             }
             console.log("upper/bottom left/right ");
@@ -115,13 +93,7 @@ export default class Referee {
           // RIGHT AND LEFT SIDE MOVEMENT
         } else if (desiredPosition.x - initialPosition.x === 2 * i) {
           if (desiredPosition.y - initialPosition.y === j) {
-            if (
-              this.titleIsEmptyOrOccupiedByOpponent(
-                desiredPosition,
-                boardState,
-                team
-              )
-            ) {
+            if (this.titleIsEmptyOrOccupiedByOpponent(desiredPosition, boardState, team)) {
               return true;
             }
           }
@@ -134,24 +106,16 @@ export default class Referee {
   bishopMove(initialPosition, desiredPosition, team, boardState) {
     for (let i = 1; i < 8; i++) {
       //  MOVING TOP RIGHT
-      if (
-        desiredPosition.x > initialPosition.x &&
-        desiredPosition.y > initialPosition.y
-      ) {
+      if (desiredPosition.x > initialPosition.x && desiredPosition.y > initialPosition.y) {
         let passPostion = {
           x: initialPosition.x + i,
           y: initialPosition.y + i,
         };
 
         // checkng if the move is valid for bishop
-        if (
-          passPostion.x === desiredPosition.x &&
-          passPostion.y === desiredPosition.y
-        ) {
+        if (passPostion.x === desiredPosition.x && passPostion.y === desiredPosition.y) {
           // checking if empty or occupied by opponet
-          if (
-            this.titleIsEmptyOrOccupiedByOpponent(passPostion, boardState, team)
-          ) {
+          if (this.titleIsEmptyOrOccupiedByOpponent(passPostion, boardState, team)) {
             return true;
           }
         } else {
@@ -163,24 +127,16 @@ export default class Referee {
       }
 
       // MOVING DOWN RIGHT
-      if (
-        desiredPosition.x > initialPosition.x &&
-        desiredPosition.y < initialPosition.y
-      ) {
+      if (desiredPosition.x > initialPosition.x && desiredPosition.y < initialPosition.y) {
         let passPostion = {
           x: initialPosition.x + i,
           y: initialPosition.y - i,
         };
 
         // checkng if the move is valid for bishop
-        if (
-          passPostion.x === desiredPosition.x &&
-          passPostion.y === desiredPosition.y
-        ) {
+        if (passPostion.x === desiredPosition.x && passPostion.y === desiredPosition.y) {
           // checking if empty or occupied by opponet
-          if (
-            this.titleIsEmptyOrOccupiedByOpponent(passPostion, boardState, team)
-          ) {
+          if (this.titleIsEmptyOrOccupiedByOpponent(passPostion, boardState, team)) {
             return true;
           }
         } else {
@@ -192,24 +148,16 @@ export default class Referee {
       }
 
       // MOVING BOTTOM LEFT
-      if (
-        desiredPosition.x < initialPosition.x &&
-        desiredPosition.y < initialPosition.y
-      ) {
+      if (desiredPosition.x < initialPosition.x && desiredPosition.y < initialPosition.y) {
         let passPostion = {
           x: initialPosition.x - i,
           y: initialPosition.y - i,
         };
 
         // checkng if the move is valid for bishop
-        if (
-          passPostion.x === desiredPosition.x &&
-          passPostion.y === desiredPosition.y
-        ) {
+        if (passPostion.x === desiredPosition.x && passPostion.y === desiredPosition.y) {
           // checking if empty or occupied by opponet
-          if (
-            this.titleIsEmptyOrOccupiedByOpponent(passPostion, boardState, team)
-          ) {
+          if (this.titleIsEmptyOrOccupiedByOpponent(passPostion, boardState, team)) {
             return true;
           }
         } else {
@@ -220,24 +168,16 @@ export default class Referee {
         }
       }
       //MOVING TOP LEFT
-      if (
-        desiredPosition.x < initialPosition.x &&
-        desiredPosition.y > initialPosition.y
-      ) {
+      if (desiredPosition.x < initialPosition.x && desiredPosition.y > initialPosition.y) {
         let passPostion = {
           x: initialPosition.x - i,
           y: initialPosition.y + i,
         };
 
         // checkng if the move is valid for bishop
-        if (
-          passPostion.x === desiredPosition.x &&
-          passPostion.y === desiredPosition.y
-        ) {
+        if (passPostion.x === desiredPosition.x && passPostion.y === desiredPosition.y) {
           // checking if empty or occupied by opponet
-          if (
-            this.titleIsEmptyOrOccupiedByOpponent(passPostion, boardState, team)
-          ) {
+          if (this.titleIsEmptyOrOccupiedByOpponent(passPostion, boardState, team)) {
             return true;
           }
         } else {
@@ -262,18 +202,9 @@ export default class Referee {
           x: initialPosition.x,
           y: initialPosition.y + i * multiplier,
         };
-        if (
-          desiredPosition.x === passPosition.x &&
-          desiredPosition.y === passPosition.y
-        ) {
+        if (desiredPosition.x === passPosition.x && desiredPosition.y === passPosition.y) {
           console.log("arrived");
-          if (
-            this.titleIsEmptyOrOccupiedByOpponent(
-              passPosition,
-              boardState,
-              team
-            )
-          ) {
+          if (this.titleIsEmptyOrOccupiedByOpponent(passPosition, boardState, team)) {
             return true;
           }
           break;
@@ -292,17 +223,8 @@ export default class Referee {
           x: initialPosition.x + i * multiplier,
           y: initialPosition.y,
         };
-        if (
-          desiredPosition.x === passPosition.x &&
-          desiredPosition.y === passPosition.y
-        ) {
-          if (
-            this.titleIsEmptyOrOccupiedByOpponent(
-              passPosition,
-              boardState,
-              team
-            )
-          ) {
+        if (desiredPosition.x === passPosition.x && desiredPosition.y === passPosition.y) {
+          if (this.titleIsEmptyOrOccupiedByOpponent(passPosition, boardState, team)) {
             return true;
           }
           break;
@@ -324,39 +246,19 @@ export default class Referee {
 
     switch (type) {
       case PieceType.PAWN:
-        validMove = this.pawnMove(
-          initialPosition,
-          desiredPosition,
-          team,
-          boardState
-        );
+        validMove = this.pawnMove(initialPosition, desiredPosition, team, boardState);
         break;
 
       case PieceType.KNIGHT:
-        validMove = this.knightMove(
-          initialPosition,
-          desiredPosition,
-          team,
-          boardState
-        );
+        validMove = this.knightMove(initialPosition, desiredPosition, team, boardState);
         break;
 
       case PieceType.BISHOP:
-        validMove = this.bishopMove(
-          initialPosition,
-          desiredPosition,
-          team,
-          boardState
-        );
+        validMove = this.bishopMove(initialPosition, desiredPosition, team, boardState);
         break;
 
       case PieceType.ROOK:
-        validMove = this.rookMove(
-          initialPosition,
-          desiredPosition,
-          team,
-          boardState
-        );
+        validMove = this.rookMove(initialPosition, desiredPosition, team, boardState);
         break;
     }
 

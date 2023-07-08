@@ -14,12 +14,7 @@ function Tile({ number, image, xindex, yindex }) {
 
   return (
     <div className={className}>
-      {image && (
-        <div
-          style={{ backgroundImage: `url(${image})` }}
-          className="chess-piece"
-        ></div>
-      )}
+      {image && <div style={{ backgroundImage: `url(${image})` }} className="chess-piece"></div>}
     </div>
   );
 }
