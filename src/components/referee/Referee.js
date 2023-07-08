@@ -232,7 +232,6 @@ export default class Referee {
             }
           }
         }
-
         //MOVING TOP LEFT
         if (
           desiredPosition.x < initialPosition.x &&
@@ -263,6 +262,45 @@ export default class Referee {
             if (this.titleIsOccupied(passPostion, boardState)) {
               break;
             }
+          }
+        }
+      }
+    }
+
+    // MOVEMENT ROOK
+    else if (type === PieceType.ROOK) {
+      if (desiredPosition.x === initialPosition.x) {
+        console.log("moving vertical");
+
+        for (let i = 1; i < 8; i++) {
+          let multiplier = desiredPosition.y < initialPosition.y ? -1 : 1;
+          let passPosition = {
+            x: initialPosition.x,
+            y: initialPosition.y + i * multiplier,
+          };
+          if (
+            desiredPosition.x === passPosition.x &&
+            desiredPosition.y === passPosition.y
+          ) {
+            console.log("arrived");
+            break;
+          }
+        }
+      } else if (desiredPosition.y === initialPosition.y) {
+        console.log("moving horizontal");
+
+        for (let i = 1; i < 8; i++) {
+          let multiplier = desiredPosition.x < initialPosition.x ? -1 : 1;
+          let passPosition = {
+            x: initialPosition.x + i * multiplier,
+            y: initialPosition.y,
+          };
+          if (
+            desiredPosition.x === passPosition.x &&
+            desiredPosition.y === passPosition.y
+          ) {
+            console.log("arrived");
+            break;
           }
         }
       }
