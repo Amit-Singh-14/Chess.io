@@ -92,7 +92,6 @@ export default class Referee {
   }
 
   // Knight movement/attack logic
-
   knightMove(initialPosition, desiredPosition, team, boardState) {
     for (let i = -1; i < 2; i += 2) {
       for (let j = -1; j < 2; j += 2) {
@@ -102,7 +101,7 @@ export default class Referee {
             if (this.titleIsEmptyOrOccupiedByOpponent(desiredPosition, boardState, team)) {
               return true;
             }
-            console.log("upper/bottom left/right ");
+            // console.log("upper/bottom left/right ");
           }
           // RIGHT AND LEFT SIDE MOVEMENT
         } else if (desiredPosition.x - initialPosition.x === 2 * i) {
@@ -117,24 +116,25 @@ export default class Referee {
     return false;
   }
 
+  // BISHOP MOVEMENT
   bishopMove(initialPosition, desiredPosition, team, boardState) {
     for (let i = 1; i < 8; i++) {
       //  MOVING TOP RIGHT
       if (desiredPosition.x > initialPosition.x && desiredPosition.y > initialPosition.y) {
-        let passPostion = {
+        let passPosition = {
           x: initialPosition.x + i,
           y: initialPosition.y + i,
         };
 
         // checkng if the move is valid for bishop
-        if (passPostion.x === desiredPosition.x && passPostion.y === desiredPosition.y) {
+        if (samePosition(passPosition, desiredPosition)) {
           // checking if empty or occupied by opponet
-          if (this.titleIsEmptyOrOccupiedByOpponent(passPostion, boardState, team)) {
+          if (this.titleIsEmptyOrOccupiedByOpponent(passPosition, boardState, team)) {
             return true;
           }
         } else {
           // checking the pass tile beach mai koi piece toh nhi
-          if (this.titleIsOccupied(passPostion, boardState)) {
+          if (this.titleIsOccupied(passPosition, boardState)) {
             break;
           }
         }
@@ -142,20 +142,20 @@ export default class Referee {
 
       // MOVING DOWN RIGHT
       if (desiredPosition.x > initialPosition.x && desiredPosition.y < initialPosition.y) {
-        let passPostion = {
+        let passPosition = {
           x: initialPosition.x + i,
           y: initialPosition.y - i,
         };
 
         // checkng if the move is valid for bishop
-        if (passPostion.x === desiredPosition.x && passPostion.y === desiredPosition.y) {
+        if (samePosition(passPosition, desiredPosition)) {
           // checking if empty or occupied by opponet
-          if (this.titleIsEmptyOrOccupiedByOpponent(passPostion, boardState, team)) {
+          if (this.titleIsEmptyOrOccupiedByOpponent(passPosition, boardState, team)) {
             return true;
           }
         } else {
           // checking the pass tile beach mai koi piece toh nhi
-          if (this.titleIsOccupied(passPostion, boardState)) {
+          if (this.titleIsOccupied(passPosition, boardState)) {
             break;
           }
         }
@@ -163,40 +163,40 @@ export default class Referee {
 
       // MOVING BOTTOM LEFT
       if (desiredPosition.x < initialPosition.x && desiredPosition.y < initialPosition.y) {
-        let passPostion = {
+        let passPosition = {
           x: initialPosition.x - i,
           y: initialPosition.y - i,
         };
 
         // checkng if the move is valid for bishop
-        if (passPostion.x === desiredPosition.x && passPostion.y === desiredPosition.y) {
+        if (samePosition(passPosition, desiredPosition)) {
           // checking if empty or occupied by opponet
-          if (this.titleIsEmptyOrOccupiedByOpponent(passPostion, boardState, team)) {
+          if (this.titleIsEmptyOrOccupiedByOpponent(passPosition, boardState, team)) {
             return true;
           }
         } else {
           // checking the pass tile beach mai koi piece toh nhi
-          if (this.titleIsOccupied(passPostion, boardState)) {
+          if (this.titleIsOccupied(passPosition, boardState)) {
             break;
           }
         }
       }
       //MOVING TOP LEFT
       if (desiredPosition.x < initialPosition.x && desiredPosition.y > initialPosition.y) {
-        let passPostion = {
+        let passPosition = {
           x: initialPosition.x - i,
           y: initialPosition.y + i,
         };
 
         // checkng if the move is valid for bishop
-        if (passPostion.x === desiredPosition.x && passPostion.y === desiredPosition.y) {
+        if (samePosition(passPosition, desiredPosition)) {
           // checking if empty or occupied by opponet
-          if (this.titleIsEmptyOrOccupiedByOpponent(passPostion, boardState, team)) {
+          if (this.titleIsEmptyOrOccupiedByOpponent(passPosition, boardState, team)) {
             return true;
           }
         } else {
           // checking the pass tile beach mai koi piece toh nhi
-          if (this.titleIsOccupied(passPostion, boardState)) {
+          if (this.titleIsOccupied(passPosition, boardState)) {
             break;
           }
         }
@@ -215,7 +215,7 @@ export default class Referee {
           x: initialPosition.x,
           y: initialPosition.y + i * multiplier,
         };
-        if (desiredPosition.x === passPosition.x && desiredPosition.y === passPosition.y) {
+        if (samePosition(passPosition, desiredPosition)) {
           console.log("arrived");
           if (this.titleIsEmptyOrOccupiedByOpponent(passPosition, boardState, team)) {
             return true;
@@ -236,7 +236,7 @@ export default class Referee {
           x: initialPosition.x + i * multiplier,
           y: initialPosition.y,
         };
-        if (desiredPosition.x === passPosition.x && desiredPosition.y === passPosition.y) {
+        if (samePosition(passPosition, desiredPosition)) {
           if (this.titleIsEmptyOrOccupiedByOpponent(passPosition, boardState, team)) {
             return true;
           }
@@ -255,42 +255,35 @@ export default class Referee {
   // QUEEN MOVEMENT
   queenMove(initialPosition, desiredPosition, team, boardState) {
     for (let i = 1; i < 8; i++) {
-      // TOP AND BOTTOM
-      if (desiredPosition.x === initialPosition.x) {
-        let multiplier = desiredPosition.y < initialPosition.y ? -1 : 1;
-        let passPosition = {
-          x: initialPosition.x,
-          y: initialPosition.y + i * multiplier,
-        };
-        if (desiredPosition.x === passPosition.x && desiredPosition.y === passPosition.y) {
-          if (this.titleIsEmptyOrOccupiedByOpponent(passPosition, boardState, team)) {
-            return true;
-          }
-          break;
-        } else {
-          if (this.titleIsOccupied(passPosition, boardState)) {
-            break;
-          }
-        }
+      let multiplierX, multiplierY;
+      if (desiredPosition.x < initialPosition.x) {
+        multiplierX = -1; // left
+      } else if (desiredPosition.x > initialPosition.x) {
+        multiplierX = 1; // right
+      } else {
+        multiplierX = 0; // middle (up and down)
       }
 
-      // LEFT AND RIGHT
-      if (desiredPosition.y === initialPosition.y) {
-        let multiplier = desiredPosition.x < initialPosition.x ? -1 : 1;
-        console.log("left");
-        let passPosition = {
-          x: initialPosition.x + i * multiplier,
-          y: initialPosition.y,
-        };
-        if (desiredPosition.x === passPosition.x && desiredPosition.y === passPosition.y) {
-          if (this.titleIsEmptyOrOccupiedByOpponent(passPosition, boardState, team)) {
-            return true;
-          }
+      if (desiredPosition.y < initialPosition.y) {
+        multiplierY = -1; //down
+      } else if (desiredPosition.y > initialPosition.y) {
+        multiplierY = 1; // up
+      } else {
+        multiplierY = 0; // middle (left and right)
+      }
+
+      let passPosition = {
+        x: initialPosition.x + i * multiplierX,
+        y: initialPosition.y + i * multiplierY,
+      };
+      console.log(passPosition.x, passPosition.y);
+      if (samePosition(passPosition, desiredPosition)) {
+        if (this.titleIsEmptyOrOccupiedByOpponent(passPosition, boardState, team)) {
+          return true;
+        }
+      } else {
+        if (this.titleIsOccupied(passPosition, boardState)) {
           break;
-        } else {
-          if (this.titleIsOccupied(passPosition, boardState)) {
-            break;
-          }
         }
       }
     }
@@ -325,6 +318,10 @@ export default class Referee {
 
       case PieceType.KING:
         validMove = this.kingMove(initialPosition, desiredPosition, team, boardState);
+        break;
+
+      default:
+        validMove = false;
         break;
     }
 
