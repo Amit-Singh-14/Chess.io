@@ -2,7 +2,10 @@ import { PieceType, TeamType, samePosition } from "../../constant";
 
 export default class Referee {
   titleIsEmptyOrOccupiedByOpponent(position, boardState, team) {
-    return !this.titleIsOccupied(position, boardState) || this.titleIsOccupiedByOpponent(position, boardState, team);
+    return (
+      !this.titleIsOccupied(position, boardState) ||
+      this.titleIsOccupiedByOpponent(position, boardState, team)
+    );
   }
 
   titleIsOccupied(position, boardState) {
@@ -29,11 +32,15 @@ export default class Referee {
     const pawnDirection = team === TeamType.OUR ? 1 : -1;
     if (type === PieceType.PAWN) {
       if (
-        (desiredPosition.x - initialPosition.x === -1 || desiredPosition.x - initialPosition.x === 1) &&
+        (desiredPosition.x - initialPosition.x === -1 ||
+          desiredPosition.x - initialPosition.x === 1) &&
         desiredPosition.y - initialPosition.y === pawnDirection
       ) {
         const piece = boardState.find(
-          (p) => p.position.x === desiredPosition.x && p.position.y === desiredPosition.y - pawnDirection && p.enPassant
+          (p) =>
+            p.position.x === desiredPosition.x &&
+            p.position.y === desiredPosition.y - pawnDirection &&
+            p.enPassant
         );
         if (piece) {
           return true;
@@ -55,11 +62,17 @@ export default class Referee {
     ) {
       if (
         !this.titleIsOccupied(desiredPosition, boardState) &&
-        !this.titleIsOccupied({ x: desiredPosition.x, y: desiredPosition.y - pawnDirection }, boardState)
+        !this.titleIsOccupied(
+          { x: desiredPosition.x, y: desiredPosition.y - pawnDirection },
+          boardState
+        )
       ) {
         return true;
       }
-    } else if (initialPosition.x === desiredPosition.x && desiredPosition.y - initialPosition.y === pawnDirection) {
+    } else if (
+      initialPosition.x === desiredPosition.x &&
+      desiredPosition.y - initialPosition.y === pawnDirection
+    ) {
       if (!this.titleIsOccupied(desiredPosition, boardState)) {
         return true;
       }
@@ -67,7 +80,8 @@ export default class Referee {
 
     // ATTACK LOGIC
     else if (
-      (desiredPosition.x - initialPosition.x === -1 || desiredPosition.x - initialPosition.x === 1) &&
+      (desiredPosition.x - initialPosition.x === -1 ||
+        desiredPosition.x - initialPosition.x === 1) &&
       desiredPosition.y - initialPosition.y === pawnDirection
     ) {
       if (this.titleIsOccupiedByOpponent(desiredPosition, boardState, team)) {
@@ -191,10 +205,9 @@ export default class Referee {
     return false;
   }
 
+  // ROOK MOVEMENT
   rookMove(initialPosition, desiredPosition, team, boardState) {
     if (desiredPosition.x === initialPosition.x) {
-      console.log("moving vertical");
-
       // rook horizonatal and vertical movement
       for (let i = 1; i < 8; i++) {
         let multiplier = desiredPosition.y < initialPosition.y ? -1 : 1;
@@ -239,6 +252,51 @@ export default class Referee {
     return false;
   }
 
+  // QUEEN MOVEMENT
+  queenMove(initialPosition, desiredPosition, team, boardState) {
+    for (let i = 1; i < 8; i++) {
+      // TOP AND BOTTOM
+      if (desiredPosition.x === initialPosition.x) {
+        let multiplier = desiredPosition.y < initialPosition.y ? -1 : 1;
+        let passPosition = {
+          x: initialPosition.x,
+          y: initialPosition.y + i * multiplier,
+        };
+        if (desiredPosition.x === passPosition.x && desiredPosition.y === passPosition.y) {
+          if (this.titleIsEmptyOrOccupiedByOpponent(passPosition, boardState, team)) {
+            return true;
+          }
+          break;
+        } else {
+          if (this.titleIsOccupied(passPosition, boardState)) {
+            break;
+          }
+        }
+      }
+
+      // LEFT AND RIGHT
+      if (desiredPosition.y === initialPosition.y) {
+        let multiplier = desiredPosition.x < initialPosition.x ? -1 : 1;
+        console.log("left");
+        let passPosition = {
+          x: initialPosition.x + i * multiplier,
+          y: initialPosition.y,
+        };
+        if (desiredPosition.x === passPosition.x && desiredPosition.y === passPosition.y) {
+          if (this.titleIsEmptyOrOccupiedByOpponent(passPosition, boardState, team)) {
+            return true;
+          }
+          break;
+        } else {
+          if (this.titleIsOccupied(passPosition, boardState)) {
+            break;
+          }
+        }
+      }
+    }
+  }
+
+  // MAIN FUNCTION
   isValidMove(initialPosition, desiredPosition, type, team, boardState) {
     console.log("refereee is checking the move....");
 
@@ -259,6 +317,14 @@ export default class Referee {
 
       case PieceType.ROOK:
         validMove = this.rookMove(initialPosition, desiredPosition, team, boardState);
+        break;
+
+      case PieceType.QUEEN:
+        validMove = this.queenMove(initialPosition, desiredPosition, team, boardState);
+        break;
+
+      case PieceType.KING:
+        validMove = this.kingMove(initialPosition, desiredPosition, team, boardState);
         break;
     }
 
