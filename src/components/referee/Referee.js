@@ -9,7 +9,6 @@ export default class Referee {
   }
 
   titleIsOccupied(position, boardState) {
-    console.log("checing if title is occupied.....");
     const piece = boardState.find((p) => samePosition(p.position, position));
     if (piece) {
       return true;
@@ -216,7 +215,6 @@ export default class Referee {
           y: initialPosition.y + i * multiplier,
         };
         if (samePosition(passPosition, desiredPosition)) {
-          console.log("arrived");
           if (this.titleIsEmptyOrOccupiedByOpponent(passPosition, boardState, team)) {
             return true;
           }
@@ -228,7 +226,7 @@ export default class Referee {
         }
       }
     } else if (desiredPosition.y === initialPosition.y) {
-      console.log("moving horizontal");
+      // console.log("moving horizontal");
 
       for (let i = 1; i < 8; i++) {
         let multiplier = desiredPosition.x < initialPosition.x ? -1 : 1;
@@ -255,28 +253,16 @@ export default class Referee {
   // QUEEN MOVEMENT
   queenMove(initialPosition, desiredPosition, team, boardState) {
     for (let i = 1; i < 8; i++) {
-      let multiplierX, multiplierY;
-      if (desiredPosition.x < initialPosition.x) {
-        multiplierX = -1; // left
-      } else if (desiredPosition.x > initialPosition.x) {
-        multiplierX = 1; // right
-      } else {
-        multiplierX = 0; // middle (up and down)
-      }
+      let multiplierX =
+        desiredPosition.x < initialPosition.x ? -1 : desiredPosition.x > initialPosition.x ? 1 : 0;
 
-      if (desiredPosition.y < initialPosition.y) {
-        multiplierY = -1; //down
-      } else if (desiredPosition.y > initialPosition.y) {
-        multiplierY = 1; // up
-      } else {
-        multiplierY = 0; // middle (left and right)
-      }
+      let multiplierY =
+        desiredPosition.y < initialPosition.y ? -1 : desiredPosition.y > initialPosition.y ? 1 : 0;
 
       let passPosition = {
         x: initialPosition.x + i * multiplierX,
         y: initialPosition.y + i * multiplierY,
       };
-      console.log(passPosition.x, passPosition.y);
       if (samePosition(passPosition, desiredPosition)) {
         if (this.titleIsEmptyOrOccupiedByOpponent(passPosition, boardState, team)) {
           return true;
@@ -287,12 +273,37 @@ export default class Referee {
         }
       }
     }
+    return false;
+  }
+
+  // KING MOVEMENT
+  kingMove(initialPosition, desiredPosition, team, boardState) {
+    for (let i = 1; i < 2; i++) {
+      let multiplierX =
+        desiredPosition.x < initialPosition.x ? -1 : desiredPosition.x > initialPosition.x ? 1 : 0;
+
+      let multiplierY =
+        desiredPosition.y < initialPosition.y ? -1 : desiredPosition.y > initialPosition.y ? 1 : 0;
+
+      let passPosition = {
+        x: initialPosition.x + i * multiplierX,
+        y: initialPosition.y + i * multiplierY,
+      };
+      if (samePosition(passPosition, desiredPosition)) {
+        if (this.titleIsEmptyOrOccupiedByOpponent(passPosition, boardState, team)) {
+          return true;
+        }
+      } else {
+        if (this.titleIsOccupied(passPosition, boardState)) {
+          break;
+        }
+      }
+    }
+    return false;
   }
 
   // MAIN FUNCTION
   isValidMove(initialPosition, desiredPosition, type, team, boardState) {
-    console.log("refereee is checking the move....");
-
     let validMove = false;
 
     switch (type) {
