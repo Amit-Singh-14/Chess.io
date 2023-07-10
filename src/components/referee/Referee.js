@@ -1,15 +1,10 @@
-import { PieceType, TeamType, samePosition } from "../../constant";
-import { bishopMove } from "./rules/BishopRule";
-import {
-  tileIsOccupied,
-  tileIsEmptyOrOccupiedByOpponent,
-  tileIsOccupiedByOpponent,
-} from "./rules/GeneralRules";
-import { kingMove } from "./rules/KingRule";
-import { knightMove } from "./rules/KnightRule";
-import { pawnMove } from "./rules/PawnRule";
-import { queenMove } from "./rules/QueenRule";
-import { rookMove } from "./rules/RookRule";
+import { PieceType, TeamType } from "../../constant";
+import { bishopMove } from "./rules/Bishop";
+import { kingMove } from "./rules/King";
+import { knightMove } from "./rules/Knight";
+import { pawnMove } from "./rules/Pawn";
+import { queenMove } from "./rules/Queen";
+import { rookMove } from "./rules/Rook";
 
 export default class Referee {
   //FOR PAWN ENPASANT MOVE
@@ -63,6 +58,8 @@ export default class Referee {
       case PieceType.KING:
         validMove = kingMove(initialPosition, desiredPosition, team, boardState);
         break;
+      default:
+        validMove = false;
     }
 
     return validMove;

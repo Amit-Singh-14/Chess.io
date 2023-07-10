@@ -1,5 +1,5 @@
 import { samePosition } from "../../../constant";
-import { tileIsEmptyOrOccupiedByOpponent, tileIsOccupied } from "./GeneralRules";
+import { tileIsEmptyOrOccupiedByOpponent, tileIsOccupied } from "./General";
 
 // QUEEN MOVEMENT
 export const queenMove = (initialPosition, desiredPosition, team, boardState) => {

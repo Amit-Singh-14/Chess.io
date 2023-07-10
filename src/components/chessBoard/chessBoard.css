@@ -6,3 +6,37 @@
   height: 600px;
   /* background-color: #769557; */
 }
+#pawn-promotion-modal {
+  /*creating an overlay so that we cant access pieces behind the modal */
+  position: absolute;
+  top: 0px;
+  bottom: 0px;
+  left: 0px;
+  right: 0px;
+}
+#pawn-promotion-modal.hidden {
+  display: none;
+}
+#pawn-promotion-modal > .modal-body {
+  height: 200px;
+  position: absolute;
+  width: 600px;
+  background-color: rgba(0, 0, 0, 0.6);
+  top: calc(50% - 100px);
+  left: calc(50% - 300px);
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.modal-body > img {
+  height: 120px;
+  width: 120px;
+  padding: 20px;
+  border-radius: 30%;
+}
+
+.modal-body > img:hover {
+  background-color: rgba(255, 255, 255, 0.5);
+  cursor: pointer;
+}

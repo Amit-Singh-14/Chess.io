@@ -1,4 +1,4 @@
-import { tileIsEmptyOrOccupiedByOpponent } from "./GeneralRules";
+import { tileIsEmptyOrOccupiedByOpponent } from "./General";
 
 // Knight movement/attack logic
 export const knightMove = (initialPosition, desiredPosition, team, boardState) => {

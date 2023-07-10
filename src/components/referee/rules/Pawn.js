@@ -1,5 +1,5 @@
 import { TeamType } from "../../../constant";
-import { tileIsOccupied, tileIsOccupiedByOpponent } from "./GeneralRules";
+import { tileIsOccupied, tileIsOccupiedByOpponent } from "./General";
 // PAWN MOVEMENT/ATTACK LOGIC
 export const pawnMove = (initialPosition, desiredPosition, team, boardState) => {
   const specialRow = team === TeamType.OUR ? 1 : 6;

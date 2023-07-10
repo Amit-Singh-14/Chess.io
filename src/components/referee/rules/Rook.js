@@ -1,5 +1,5 @@
 import { samePosition } from "../../../constant";
-import { tileIsEmptyOrOccupiedByOpponent, tileIsOccupied } from "./GeneralRules";
+import { tileIsEmptyOrOccupiedByOpponent, tileIsOccupied } from "./General";
 
 // ROOK MOVEMENT
 export const rookMove = (initialPosition, desiredPosition, team, boardState) => {
