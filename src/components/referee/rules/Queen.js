@@ -1,5 +1,9 @@
 import { samePosition } from "../../../constant";
-import { tileIsEmptyOrOccupiedByOpponent, tileIsOccupied } from "./General";
+import {
+  tileIsEmptyOrOccupiedByOpponent,
+  tileIsOccupied,
+  tileIsOccupiedByOpponent,
+} from "./General";
 
 // QUEEN MOVEMENT
 export const queenMove = (initialPosition, desiredPosition, team, boardState) => {
@@ -25,4 +29,114 @@ export const queenMove = (initialPosition, desiredPosition, team, boardState) =>
     }
   }
   return false;
+};
+
+export const getPossibleQueenMove = (queen, boardState) => {
+  const possibleMove = [];
+  // top
+  for (let i = 1; i < 8; i++) {
+    const destination = { x: queen.position.x, y: queen.position.y + i };
+
+    if (!tileIsOccupied(destination, boardState)) {
+      possibleMove.push(destination);
+    } else if (tileIsEmptyOrOccupiedByOpponent(destination, boardState, queen.team)) {
+      possibleMove.push(destination);
+      break;
+    } else {
+      break;
+    }
+  }
+  // bottom
+  for (let i = 1; i < 8; i++) {
+    const destination = { x: queen.position.x, y: queen.position.y - i };
+
+    if (!tileIsOccupied(destination, boardState)) {
+      possibleMove.push(destination);
+    } else if (tileIsEmptyOrOccupiedByOpponent(destination, boardState, queen.team)) {
+      possibleMove.push(destination);
+      break;
+    } else {
+      break;
+    }
+  }
+  // right
+  for (let i = 1; i < 8; i++) {
+    const destination = { x: queen.position.x + i, y: queen.position.y };
+
+    if (!tileIsOccupied(destination, boardState)) {
+      possibleMove.push(destination);
+    } else if (tileIsEmptyOrOccupiedByOpponent(destination, boardState, queen.team)) {
+      possibleMove.push(destination);
+      break;
+    } else {
+      break;
+    }
+  }
+  // left
+  for (let i = 1; i < 8; i++) {
+    const destination = { x: queen.position.x - 1, y: queen.position.y };
+
+    if (!tileIsOccupied(destination, boardState)) {
+      possibleMove.push(destination);
+    } else if (tileIsEmptyOrOccupiedByOpponent(destination, boardState, queen.team)) {
+      possibleMove.push(destination);
+      break;
+    } else {
+      break;
+    }
+  }
+
+  // upper right
+  for (let i = 1; i < 8; i++) {
+    const destination = { x: queen.position.x + i, y: queen.position.y + i };
+
+    if (!tileIsOccupied(destination, boardState)) {
+      possibleMove.push(destination);
+    } else if (tileIsOccupiedByOpponent(destination, boardState, queen.team)) {
+      possibleMove.push(destination);
+      break;
+    } else {
+      break;
+    }
+  }
+  // upper left
+  for (let i = 1; i < 8; i++) {
+    const destination = { x: queen.position.x - i, y: queen.position.y - i };
+
+    if (!tileIsOccupied(destination, boardState)) {
+      possibleMove.push(destination);
+    } else if (tileIsOccupiedByOpponent(destination, boardState, queen.team)) {
+      possibleMove.push(destination);
+      break;
+    } else {
+      break;
+    }
+  }
+  // bottom right
+  for (let i = 1; i < 8; i++) {
+    const destination = { x: queen.position.x + i, y: queen.position.y - i };
+
+    if (!tileIsOccupied(destination, boardState)) {
+      possibleMove.push(destination);
+    } else if (tileIsOccupiedByOpponent(destination, boardState, queen.team)) {
+      possibleMove.push(destination);
+      break;
+    } else {
+      break;
+    }
+  }
+  // bottom left
+  for (let i = 1; i < 8; i++) {
+    const destination = { x: queen.position.x - i, y: queen.position.y + i };
+
+    if (!tileIsOccupied(destination, boardState)) {
+      possibleMove.push(destination);
+    } else if (tileIsOccupiedByOpponent(destination, boardState, queen.team)) {
+      possibleMove.push(destination);
+      break;
+    } else {
+      break;
+    }
+  }
+  return possibleMove;
 };

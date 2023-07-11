@@ -1,5 +1,9 @@
 import { samePosition } from "../../../constant";
-import { tileIsEmptyOrOccupiedByOpponent, tileIsOccupied } from "./General";
+import {
+  tileIsEmptyOrOccupiedByOpponent,
+  tileIsOccupied,
+  tileIsOccupiedByOpponent,
+} from "./General";
 
 // BISHOP MOVEMENT
 export const bishopMove = (initialPosition, desiredPosition, team, boardState) => {
@@ -88,4 +92,63 @@ export const bishopMove = (initialPosition, desiredPosition, team, boardState) =
     }
   }
   return false;
+};
+
+export const getPossibleBishopMove = (bishop, boardState) => {
+  const possibleMove = [];
+
+  // upper right
+  for (let i = 1; i < 8; i++) {
+    const destination = { x: bishop.position.x + i, y: bishop.position.y + i };
+
+    if (!tileIsOccupied(destination, boardState)) {
+      possibleMove.push(destination);
+    } else if (tileIsOccupiedByOpponent(destination, boardState, bishop.team)) {
+      possibleMove.push(destination);
+      break;
+    } else {
+      break;
+    }
+  }
+  // upper left
+  for (let i = 1; i < 8; i++) {
+    const destination = { x: bishop.position.x - i, y: bishop.position.y - i };
+
+    if (!tileIsOccupied(destination, boardState)) {
+      possibleMove.push(destination);
+    } else if (tileIsOccupiedByOpponent(destination, boardState, bishop.team)) {
+      possibleMove.push(destination);
+      break;
+    } else {
+      break;
+    }
+  }
+  // bottom right
+  for (let i = 1; i < 8; i++) {
+    const destination = { x: bishop.position.x + i, y: bishop.position.y - i };
+
+    if (!tileIsOccupied(destination, boardState)) {
+      possibleMove.push(destination);
+    } else if (tileIsOccupiedByOpponent(destination, boardState, bishop.team)) {
+      possibleMove.push(destination);
+      break;
+    } else {
+      break;
+    }
+  }
+  // bottom left
+  for (let i = 1; i < 8; i++) {
+    const destination = { x: bishop.position.x - i, y: bishop.position.y + i };
+
+    if (!tileIsOccupied(destination, boardState)) {
+      possibleMove.push(destination);
+    } else if (tileIsOccupiedByOpponent(destination, boardState, bishop.team)) {
+      possibleMove.push(destination);
+      break;
+    } else {
+      break;
+    }
+  }
+
+  return possibleMove;
 };

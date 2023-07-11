@@ -1,10 +1,10 @@
 import { PieceType, TeamType } from "../../constant";
-import { bishopMove } from "./rules/Bishop";
-import { kingMove } from "./rules/King";
-import { knightMove } from "./rules/Knight";
+import { bishopMove, getPossibleBishopMove } from "./rules/Bishop";
+import { getPossibleQKingMove, kingMove } from "./rules/King";
+import { getPossibleKnightMove, knightMove } from "./rules/Knight";
 import { getPossiblePawnMove, pawnMove } from "./rules/Pawn";
-import { queenMove } from "./rules/Queen";
-import { rookMove } from "./rules/Rook";
+import { getPossibleQueenMove, queenMove } from "./rules/Queen";
+import { getPossibleRookMove, rookMove } from "./rules/Rook";
 
 export default class Referee {
   //FOR PAWN ENPASANT MOVE
@@ -67,8 +67,22 @@ export default class Referee {
   getValidMove(piece, boardState) {
     switch (piece.type) {
       case PieceType.PAWN:
-        //return moves.
         return getPossiblePawnMove(piece, boardState);
+
+      case PieceType.KNIGHT:
+        return getPossibleKnightMove(piece, boardState);
+
+      case PieceType.BISHOP:
+        return getPossibleBishopMove(piece, boardState);
+
+      case PieceType.ROOK:
+        return getPossibleRookMove(piece, boardState);
+
+      case PieceType.QUEEN:
+        return getPossibleQueenMove(piece, boardState);
+
+      case PieceType.KING:
+        return getPossibleQKingMove(piece, boardState);
 
       default:
         return [];

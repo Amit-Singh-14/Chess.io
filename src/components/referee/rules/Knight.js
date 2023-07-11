@@ -24,3 +24,22 @@ export const knightMove = (initialPosition, desiredPosition, team, boardState) =
   }
   return false;
 };
+
+export const getPossibleKnightMove = (knight, boardState) => {
+  const possibleMove = [];
+
+  for (let i = -1; i < 2; i += 2) {
+    for (let j = -1; j < 2; j += 2) {
+      const verticalMove = { x: knight.position.x + j, y: knight.position.y + i * 2 };
+      const horizontalMove = { x: knight.position.x + i * 2, y: knight.position.y + j };
+
+      if (tileIsEmptyOrOccupiedByOpponent(verticalMove, boardState, knight.team)) {
+        possibleMove.push(verticalMove);
+      }
+      if (tileIsEmptyOrOccupiedByOpponent(horizontalMove, boardState, knight.team)) {
+        possibleMove.push(horizontalMove);
+      }
+    }
+  }
+  return possibleMove;
+};

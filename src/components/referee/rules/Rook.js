@@ -46,3 +46,61 @@ export const rookMove = (initialPosition, desiredPosition, team, boardState) => 
 
   return false;
 };
+
+export const getPossibleRookMove = (rook, boardState) => {
+  const possibleMove = [];
+
+  // top
+  for (let i = 1; i < 8; i++) {
+    const destination = { x: rook.position.x, y: rook.position.y + i };
+
+    if (!tileIsOccupied(destination, boardState)) {
+      possibleMove.push(destination);
+    } else if (tileIsEmptyOrOccupiedByOpponent(destination, boardState, rook.team)) {
+      possibleMove.push(destination);
+      break;
+    } else {
+      break;
+    }
+  }
+  // bottom
+  for (let i = 1; i < 8; i++) {
+    const destination = { x: rook.position.x, y: rook.position.y - i };
+
+    if (!tileIsOccupied(destination, boardState)) {
+      possibleMove.push(destination);
+    } else if (tileIsEmptyOrOccupiedByOpponent(destination, boardState, rook.team)) {
+      possibleMove.push(destination);
+      break;
+    } else {
+      break;
+    }
+  }
+  // right
+  for (let i = 1; i < 8; i++) {
+    const destination = { x: rook.position.x + i, y: rook.position.y };
+
+    if (!tileIsOccupied(destination, boardState)) {
+      possibleMove.push(destination);
+    } else if (tileIsEmptyOrOccupiedByOpponent(destination, boardState, rook.team)) {
+      possibleMove.push(destination);
+      break;
+    } else {
+      break;
+    }
+  }
+  // left
+  for (let i = 1; i < 8; i++) {
+    const destination = { x: rook.position.x - 1, y: rook.position.y };
+
+    if (!tileIsOccupied(destination, boardState)) {
+      possibleMove.push(destination);
+    } else if (tileIsEmptyOrOccupiedByOpponent(destination, boardState, rook.team)) {
+      possibleMove.push(destination);
+      break;
+    } else {
+      break;
+    }
+  }
+  return possibleMove;
+};
