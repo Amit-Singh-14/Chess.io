@@ -28,6 +28,7 @@ export const initialBoardState = [
     },
     type: PieceType.ROOK,
     team: TeamType.OPPONENT,
+    possibleMoves: [],
   },
   {
     image: `assets/images/b_knight.png`,
@@ -37,6 +38,7 @@ export const initialBoardState = [
     },
     type: PieceType.KNIGHT,
     team: TeamType.OPPONENT,
+    possibleMoves: [],
   },
   {
     image: `assets/images/b_bishop.png`,
@@ -46,6 +48,7 @@ export const initialBoardState = [
     },
     type: PieceType.BISHOP,
     team: TeamType.OPPONENT,
+    possibleMoves: [],
   },
   {
     image: `assets/images/b_queen.png`,
@@ -55,6 +58,7 @@ export const initialBoardState = [
     },
     type: PieceType.QUEEN,
     team: TeamType.OPPONENT,
+    possibleMoves: [],
   },
   {
     image: `assets/images/b_king.png`,
@@ -64,6 +68,7 @@ export const initialBoardState = [
     },
     type: PieceType.KING,
     team: TeamType.OPPONENT,
+    possibleMoves: [],
   },
   {
     image: `assets/images/b_bishop.png`,
@@ -73,6 +78,7 @@ export const initialBoardState = [
     },
     type: PieceType.BISHOP,
     team: TeamType.OPPONENT,
+    possibleMoves: [],
   },
   {
     image: `assets/images/b_knight.png`,
@@ -81,6 +87,7 @@ export const initialBoardState = [
       y: 7,
     },
     type: PieceType.KNIGHT,
+    possibleMoves: [],
     team: TeamType.OPPONENT,
   },
   {
@@ -90,6 +97,7 @@ export const initialBoardState = [
       y: 7,
     },
     type: PieceType.ROOK,
+    possibleMoves: [],
     team: TeamType.OPPONENT,
   },
   {
@@ -99,6 +107,7 @@ export const initialBoardState = [
       y: 6,
     },
     type: PieceType.PAWN,
+    possibleMoves: [],
     team: TeamType.OPPONENT,
     enPassant: false,
   },
@@ -109,6 +118,7 @@ export const initialBoardState = [
       y: 6,
     },
     type: PieceType.PAWN,
+    possibleMoves: [],
     team: TeamType.OPPONENT,
     enPassant: false,
   },
@@ -119,6 +129,7 @@ export const initialBoardState = [
       y: 6,
     },
     type: PieceType.PAWN,
+    possibleMoves: [],
     team: TeamType.OPPONENT,
     enPassant: false,
   },
@@ -130,6 +141,7 @@ export const initialBoardState = [
     },
     type: PieceType.PAWN,
     team: TeamType.OPPONENT,
+    possibleMoves: [],
     enPassant: false,
   },
   {
@@ -140,6 +152,7 @@ export const initialBoardState = [
     },
     type: PieceType.PAWN,
     team: TeamType.OPPONENT,
+    possibleMoves: [],
     enPassant: false,
   },
   {
@@ -150,6 +163,7 @@ export const initialBoardState = [
     },
     type: PieceType.PAWN,
     team: TeamType.OPPONENT,
+    possibleMoves: [],
     enPassant: false,
   },
   {
@@ -160,6 +174,7 @@ export const initialBoardState = [
     },
     type: PieceType.PAWN,
     team: TeamType.OPPONENT,
+    possibleMoves: [],
     enPassant: false,
   },
   {
@@ -171,6 +186,7 @@ export const initialBoardState = [
     type: PieceType.PAWN,
     team: TeamType.OPPONENT,
     enPassant: false,
+    possibleMoves: [],
   },
 
   {
@@ -181,6 +197,7 @@ export const initialBoardState = [
     },
     type: PieceType.ROOK,
     team: TeamType.OUR,
+    possibleMoves: [],
   },
   {
     image: `assets/images/w_knight.png`,
@@ -190,6 +207,7 @@ export const initialBoardState = [
     },
     type: PieceType.KNIGHT,
     team: TeamType.OUR,
+    possibleMoves: [],
   },
   {
     image: `assets/images/w_bishop.png`,
@@ -198,6 +216,7 @@ export const initialBoardState = [
       y: 0,
     },
     type: PieceType.BISHOP,
+    possibleMoves: [],
     team: TeamType.OUR,
   },
   {
@@ -208,6 +227,7 @@ export const initialBoardState = [
     },
     type: PieceType.QUEEN,
     team: TeamType.OUR,
+    possibleMoves: [],
   },
   {
     image: `assets/images/w_king.png`,
@@ -216,6 +236,7 @@ export const initialBoardState = [
       y: 0,
     },
     type: PieceType.KING,
+    possibleMoves: [],
     team: TeamType.OUR,
   },
   {
@@ -226,6 +247,7 @@ export const initialBoardState = [
     },
     type: PieceType.BISHOP,
     team: TeamType.OUR,
+    possibleMoves: [],
   },
   {
     image: `assets/images/w_knight.png`,
@@ -235,6 +257,7 @@ export const initialBoardState = [
     },
     type: PieceType.KNIGHT,
     team: TeamType.OUR,
+    possibleMoves: [],
   },
   {
     image: `assets/images/w_rook.png`,
@@ -243,6 +266,7 @@ export const initialBoardState = [
       y: 0,
     },
     type: PieceType.ROOK,
+    possibleMoves: [],
     team: TeamType.OUR,
   },
   {
@@ -253,6 +277,7 @@ export const initialBoardState = [
     },
     type: PieceType.PAWN,
     team: TeamType.OUR,
+    possibleMoves: [],
     enPassant: false,
   },
   {
@@ -262,6 +287,7 @@ export const initialBoardState = [
       y: 1,
     },
     type: PieceType.PAWN,
+    possibleMoves: [],
     team: TeamType.OUR,
     enPassant: false,
   },
@@ -273,6 +299,7 @@ export const initialBoardState = [
     },
     type: PieceType.PAWN,
     team: TeamType.OUR,
+    possibleMoves: [],
     enPassant: false,
   },
   {
@@ -283,6 +310,7 @@ export const initialBoardState = [
     },
     type: PieceType.PAWN,
     team: TeamType.OUR,
+    possibleMoves: [],
     enPassant: false,
   },
   {
@@ -292,6 +320,7 @@ export const initialBoardState = [
       y: 1,
     },
     type: PieceType.PAWN,
+    possibleMoves: [],
     team: TeamType.OUR,
     enPassant: false,
   },
@@ -304,6 +333,7 @@ export const initialBoardState = [
     type: PieceType.PAWN,
     team: TeamType.OUR,
     enPassant: false,
+    possibleMoves: [],
   },
   {
     image: `assets/images/w_pawn.png`,
@@ -313,6 +343,7 @@ export const initialBoardState = [
     },
     type: PieceType.PAWN,
     team: TeamType.OUR,
+    possibleMoves: [],
     enPassant: false,
   },
   {
@@ -323,6 +354,7 @@ export const initialBoardState = [
     },
     type: PieceType.PAWN,
     team: TeamType.OUR,
+    possibleMoves: [],
     enPassant: false,
   },
 ];

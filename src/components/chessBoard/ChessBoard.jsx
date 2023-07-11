@@ -22,8 +22,18 @@ function ChessBoard() {
 
   let board = [];
 
-  // when chess piece is clicked set the activepiece to the perticular piece
+  function updateValidMoves() {
+    setPieces((currentPiece) => {
+      return currentPiece.map((p) => {
+        p.possibleMoves = referee.getValidMove(p, currentPiece);
+        return p;
+      });
+    });
+  }
+
   function grabPiece(e) {
+    updateValidMoves();
+    // console.log(pieces);
     const chessboard = chessBoardRef.current;
     const element = e.target;
 
@@ -146,7 +156,7 @@ function ChessBoard() {
     }
   }
 
-  function pormotePawn(pieceType) {
+  function promotePawn(pieceType) {
     // console.log("promoting pawn");
     const updatedPieces = pieces.reduce((result, piece) => {
       if (samePosition(piece.position, promotionPawn.position)) {
@@ -184,7 +194,6 @@ function ChessBoard() {
   function promotionTeamType() {
     return promotionPawn?.team === TeamType.OUR ? "w" : "b";
   }
-
   // inserting the pieces in correct order according to the cordinates in the board array to render
   for (let j = verticalAxis.length - 1; j >= 0; j--) {
     for (let i = 0; i < horixontalAxis.length; i++) {
@@ -192,7 +201,16 @@ function ChessBoard() {
       const piece = pieces.find((p) => p.position.x === i && p.position.y === j);
       let image = piece ? piece.image : null;
 
-      board.push(<Tile key={`${j},${i}`} image={image} number={number} />);
+      const currentPiece =
+        activePiece != null
+          ? pieces.find((p) => samePosition(p.position, grabPosition))
+          : undefined;
+      // console.log(currentPiece);
+      let highlight = currentPiece?.possibleMoves
+        ? currentPiece.possibleMoves.some((p) => samePosition(p, { x: i, y: j }))
+        : false;
+
+      board.push(<Tile key={`${j},${i}`} image={image} number={number} highlight={highlight} />);
     }
   }
   return (
@@ -200,22 +218,22 @@ function ChessBoard() {
       <div id="pawn-promotion-modal" className="hidden" ref={modalRef}>
         <div className="modal-body">
           <img
-            onClick={() => pormotePawn(PieceType.ROOK)}
+            onClick={() => promotePawn(PieceType.ROOK)}
             src={`/assets/images/${promotionTeamType()}_rook.png`}
             alt="sdfsdfsdf"
           />
           <img
-            onClick={() => pormotePawn(PieceType.QUEEN)}
+            onClick={() => promotePawn(PieceType.QUEEN)}
             src={`/assets/images/${promotionTeamType()}_queen.png`}
             alt="sdfsdfsdf"
           />
           <img
-            onClick={() => pormotePawn(PieceType.BISHOP)}
+            onClick={() => promotePawn(PieceType.BISHOP)}
             src={`/assets/images/${promotionTeamType()}_bishop.png`}
             alt="sdfsdfsdf"
           />
           <img
-            onClick={() => pormotePawn(PieceType.KNIGHT)}
+            onClick={() => promotePawn(PieceType.KNIGHT)}
             src={`/assets/images/${promotionTeamType()}_knight.png`}
             alt="sdfsdfsdf"
           />

@@ -2,7 +2,7 @@ import { PieceType, TeamType } from "../../constant";
 import { bishopMove } from "./rules/Bishop";
 import { kingMove } from "./rules/King";
 import { knightMove } from "./rules/Knight";
-import { pawnMove } from "./rules/Pawn";
+import { getPossiblePawnMove, pawnMove } from "./rules/Pawn";
 import { queenMove } from "./rules/Queen";
 import { rookMove } from "./rules/Rook";
 
@@ -61,7 +61,17 @@ export default class Referee {
       default:
         validMove = false;
     }
-
     return validMove;
+  }
+
+  getValidMove(piece, boardState) {
+    switch (piece.type) {
+      case PieceType.PAWN:
+        //return moves.
+        return getPossiblePawnMove(piece, boardState);
+
+      default:
+        return [];
+    }
   }
 }

@@ -36,3 +36,23 @@ export const pawnMove = (initialPosition, desiredPosition, team, boardState) => 
   }
   return false;
 };
+
+export const getPossiblePawnMove = (pawn, boardState) => {
+  const possibleMove = [];
+
+  const pawnDirection = pawn.team === TeamType.OUR ? 1 : -1;
+  const specialRow = pawn.team === TeamType.OUR ? 1 : 6;
+
+  if (!tileIsOccupied({ x: pawn.position.x, y: pawn.position.y + pawnDirection }, boardState)) {
+    possibleMove.push({ x: pawn.position.x, y: pawn.position.y + pawnDirection });
+
+    if (
+      pawn.position.y === specialRow &&
+      !tileIsOccupied({ x: pawn.position.x, y: pawn.position.y + pawnDirection * 2 }, boardState)
+    ) {
+      possibleMove.push({ x: pawn.position.x, y: pawn.position.y + pawnDirection * 2 });
+    }
+  }
+  // console.log(possibleMove, pawn);
+  return possibleMove;
+};
