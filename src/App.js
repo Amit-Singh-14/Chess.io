@@ -1,9 +1,9 @@
-import ChessBoard from "./components/chessBoard/ChessBoard";
+import Referee from "./components/Ref/Referee";
 import "./app.css";
 function App() {
   return (
     <div className="App">
-      <ChessBoard />
+      <Referee />
     </div>
   );
 }

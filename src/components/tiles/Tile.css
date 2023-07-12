@@ -3,6 +3,7 @@
   place-content: center;
   width: 75px;
   height: 75px;
+  /* position: relative; */
 }
 
 .tile .chess-piece {
@@ -33,10 +34,19 @@
   width: 80px;
 }
 
-.tile-highlight::before {
+.tile-highlight:not(.chess-piece-tile):before {
   content: " ";
   width: 20px;
   height: 20px;
   border-radius: 50%;
   background-color: rgba(0, 0, 0, 0.4);
+}
+
+.tile-highlight.chess-piece-tile:before {
+  position: absolute;
+  content: "";
+  width: 65px;
+  height: 65px;
+  border-radius: 50%;
+  border: 5px solid rgba(0, 0, 0, 0.548);
 }

@@ -1,7 +1,7 @@
 import "./Tile.css";
 import React from "react";
 
-function Tile({ number, image, xindex, yindex, highlight }) {
+function Tile({ number, image, highlight }) {
   // setting classname acording to the piece color
   const className = [
     "tile",
