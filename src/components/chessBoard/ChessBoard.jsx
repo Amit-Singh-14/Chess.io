@@ -6,28 +6,32 @@ import { horixontalAxis, verticalAxis, samePosition } from "../../constant";
 function ChessBoard({ playMove, pieces }) {
   const [grabPosition, setGrabPosition] = useState({ x: -1, y: -1 });
   const [activePiece, setActivePiece] = useState(null);
-
   const chessBoardRef = useRef(null);
+  const [move, setMove] = useState("white");
+  const [count, setCount] = useState(0);
 
   let board = [];
 
   function grabPiece(e) {
-    // console.log(pieces);
     const chessboard = chessBoardRef.current;
     const element = e.target;
 
-    if (element.classList.contains("chess-piece") && chessboard) {
-      setGrabPosition({
-        x: Math.floor((e.clientX - chessboard.offsetLeft) / 75),
-        y: Math.abs(Math.ceil((e.clientY - chessboard.offsetTop - 600) / 75)),
-      });
+    console.log(count);
 
-      const x = e.clientX - 50;
-      const y = e.clientY - 50;
-      element.style.position = "absolute";
-      element.style.left = `${x}px`;
-      element.style.top = `${y}px`;
-      setActivePiece(element);
+    if (element.classList.contains(move)) {
+      if (element.classList.contains("chess-piece") && chessboard) {
+        setGrabPosition({
+          x: Math.floor((e.clientX - chessboard.offsetLeft) / 75),
+          y: Math.abs(Math.ceil((e.clientY - chessboard.offsetTop - 600) / 75)),
+        });
+
+        const x = e.clientX - 50;
+        const y = e.clientY - 50;
+        element.style.position = "absolute";
+        element.style.left = `${x}px`;
+        element.style.top = `${y}px`;
+        setActivePiece(element);
+      }
     }
   }
   //movement of the piece
@@ -65,6 +69,13 @@ function ChessBoard({ playMove, pieces }) {
           activePiece.style.position = "relative";
           activePiece.style.removeProperty("left");
           activePiece.style.removeProperty("top");
+        } else {
+          if (count % 2 == 0) {
+            setMove("black");
+          } else {
+            setMove("white");
+          }
+          setCount(count + 1);
         }
       }
       setActivePiece(null);
@@ -77,7 +88,6 @@ function ChessBoard({ playMove, pieces }) {
       const number = j + i + 2;
       const piece = pieces.find((p) => p.position.x === i && p.position.y === j);
       let image = piece ? piece.image : null;
-
       const currentPiece =
         activePiece != null
           ? pieces.find((p) => samePosition(p.position, grabPosition))
@@ -85,7 +95,6 @@ function ChessBoard({ playMove, pieces }) {
       let highlight = currentPiece?.possibleMoves
         ? currentPiece.possibleMoves.some((p) => samePosition(p, { x: i, y: j }))
         : false;
-
       board.push(<Tile key={`${j},${i}`} image={image} number={number} highlight={highlight} />);
     }
   }

@@ -91,7 +91,7 @@ export const getPossibleRookMove = (rook, boardState) => {
   }
   // left
   for (let i = 1; i < 8; i++) {
-    const destination = { x: rook.position.x - 1, y: rook.position.y };
+    const destination = { x: rook.position.x - i, y: rook.position.y };
 
     if (!tileIsOccupied(destination, boardState)) {
       possibleMove.push(destination);

@@ -74,7 +74,7 @@ export const getPossibleQueenMove = (queen, boardState) => {
   }
   // left
   for (let i = 1; i < 8; i++) {
-    const destination = { x: queen.position.x - 1, y: queen.position.y };
+    const destination = { x: queen.position.x - i, y: queen.position.y };
 
     if (!tileIsOccupied(destination, boardState)) {
       possibleMove.push(destination);

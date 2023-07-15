@@ -13,10 +13,15 @@ function Tile({ number, image, highlight }) {
     .filter(Boolean)
     .join(" ");
 
+  const team = image?.includes("w_");
+  // console.log(team);
+
+  const imageclass = ["chess-piece", team ? "white" : "black"].filter(Boolean).join(" ");
+
   // console.log(highlight);
   return (
     <div className={className}>
-      {image && <div style={{ backgroundImage: `url(${image})` }} className="chess-piece"></div>}
+      {image && <div style={{ backgroundImage: `url(${image})` }} className={imageclass}></div>}
     </div>
   );
 }
