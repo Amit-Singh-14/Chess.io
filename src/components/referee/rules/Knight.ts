@@ -1,4 +1,5 @@
-import { TeamType } from "../../../Constants";
+
+import { TeamType } from "../../../Types";
 import { Piece } from "../../../models/Piece";
 import { Position } from "../../../models/Position";
 import { tileIsEmptyOrOccupiedByOpponent } from "./General";
@@ -52,7 +53,7 @@ export const getPossibleKnightMoves = (knight: Piece, boardstate: Piece[]): Posi
 
       if(tileIsEmptyOrOccupiedByOpponent(verticalMove, boardstate, knight.team)) {
         possibleMoves.push(verticalMove);
-      }
+      } 
 
       if(tileIsEmptyOrOccupiedByOpponent(horizontalMove, boardstate, knight.team)) {
         possibleMoves.push(horizontalMove);

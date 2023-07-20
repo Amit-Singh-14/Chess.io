@@ -1,4 +1,5 @@
-import { samePosition, TeamType } from "../../../Constants";
+
+import { TeamType } from "../../../Types";
 import { Piece } from "../../../models/Piece";
 import { Position } from "../../../models/Position";
 import { tileIsEmptyOrOccupiedByOpponent, tileIsOccupied , tileIsOccupiedByOpponent} from "./General";
@@ -9,7 +10,7 @@ export const bishopMove = (initialPosition: Position, desiredPosition: Position,
       if(desiredPosition.x > initialPosition.x && desiredPosition.y > initialPosition.y) {
         let passedPosition =  new Position(initialPosition.x + i,initialPosition.y + i) ;
         //Check if the tile is the destination tile
-        if(samePosition(passedPosition, desiredPosition)) {
+        if(passedPosition.samePosition(desiredPosition)) {
           //Dealing with destination tile
           if(tileIsEmptyOrOccupiedByOpponent(passedPosition, boardState, team)) {
             return true;
@@ -26,7 +27,7 @@ export const bishopMove = (initialPosition: Position, desiredPosition: Position,
       if(desiredPosition.x > initialPosition.x && desiredPosition.y < initialPosition.y) {
         let passedPosition = new Position(initialPosition.x + i,initialPosition.y - i) ;
         //Check if the tile is the destination tile
-        if(samePosition(passedPosition, desiredPosition)) {
+        if(passedPosition.samePosition(desiredPosition)) {
           //Dealing with destination tile
           if(tileIsEmptyOrOccupiedByOpponent(passedPosition, boardState, team)) {
             return true;
@@ -43,7 +44,7 @@ export const bishopMove = (initialPosition: Position, desiredPosition: Position,
         let passedPosition = new Position(initialPosition.x - i,initialPosition.y - i) ;
        
         //Check if the tile is the destination tile
-        if(samePosition(passedPosition, desiredPosition)) {
+        if(passedPosition.samePosition(desiredPosition)) {
           //Dealing with destination tile
           if(tileIsEmptyOrOccupiedByOpponent(passedPosition, boardState, team)) {
             return true;
@@ -61,7 +62,7 @@ export const bishopMove = (initialPosition: Position, desiredPosition: Position,
         new Position(initialPosition.x - i,initialPosition.y + i) ;
         
         //Check if the tile is the destination tile
-        if(samePosition(passedPosition, desiredPosition)) {
+        if(passedPosition.samePosition(desiredPosition)) {
           //Dealing with destination tile
           if(tileIsEmptyOrOccupiedByOpponent(passedPosition, boardState, team)) {
             return true;
