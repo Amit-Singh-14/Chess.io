@@ -1,4 +1,5 @@
 import { PieceType, TeamType } from "./Types";
+import { Board } from "./models/ChessBoard";
 import { Pawn } from "./models/Pawn";
 import { Piece } from "./models/Piece";
 import { Position } from "./models/Position";
@@ -9,8 +10,8 @@ export const GRID_SIZE = 75;
 
 
 
-export const initialBoardState: Piece[] = [
-  new Piece(
+export const initialBoard: Board = new Board( [
+    new Piece(
     new Position(0, 7), 
     PieceType.ROOK, 
     TeamType.OPPONENT),
@@ -122,4 +123,4 @@ export const initialBoardState: Piece[] = [
     new Pawn(
     new Position(7, 1),
     TeamType.OUR),
-    ];
+    ]);
