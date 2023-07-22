@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import {  useEffect, useRef, useState } from "react";
 import { initialBoard} from "../../Constants";
 import { bishopMove, kingMove, knightMove, pawnMove, queenMove, rookMove } from "../referee/rules";
 import Chessboard from "../chessBoard/ChessBoard";
@@ -6,7 +6,7 @@ import { Piece } from "../../models/Piece";
 import { Position } from "../../models/Position";
 import { PieceType, TeamType } from "../../Types";
 import { Pawn } from "../../models/Pawn";
-import { Board } from "../../models/ChessBoard";
+import { Board } from "../../models/Board";
 
 export default function Referee() {
     const [board, setBoard] = useState<Board>(initialBoard);
@@ -15,21 +15,26 @@ export default function Referee() {
 
     useEffect(() => {
         updatePossibleMoves();
-    });
+    } );
 
     function updatePossibleMoves() {
        board.calculateAllMoves();
+
     }
 
     function playMove(playedPiece: Piece, destination: Position): boolean {
 
+        // console.log(playedPiece);
+          
+        if(playedPiece.possibleMoves === undefined) return false;
+        console.log("cheicng");
+
         let playedMoveIsValid = false;
-        const validMove = isValidMove(
-            playedPiece.position,
-            destination,
-            playedPiece.type,
-            playedPiece.team
-        );
+
+        const validMove = playedPiece.possibleMoves?.some(m => m.samePosition(destination));
+
+        if(!validMove) return false;
+        
 
         const enPassantMove = isEnPassantMove(
             playedPiece.position,
@@ -41,18 +46,20 @@ export default function Referee() {
         
         setBoard(prevBoard => {
             // playing a move
-            playedMoveIsValid =  board.playMove(validMove, enPassantMove, playedPiece,destination);
+            playedMoveIsValid =  board.playMove(validMove,enPassantMove,playedPiece,destination);
             return board.copy();
         })
-        
-
 
         // this is for promoting a pawn
         let promotionRow = (playedPiece.team === TeamType.OUR) ? 7 : 0;
 
         if (destination.y === promotionRow && playedPiece.isPawn) {
             modalRef.current?.classList.remove("hidden");
-            setPromotionPawn(playedPiece);
+            setPromotionPawn((prevPiece) => {
+                const clonePlayedPiece = playedPiece.clone();
+                clonePlayedPiece.position = destination.clone();
+                return clonePlayedPiece;
+            });
         }
         return playedMoveIsValid;
     }
@@ -125,36 +132,21 @@ export default function Referee() {
             return;
         }
 
-        board.pieces = board.pieces.reduce((results, piece) => {
-            if (piece.samePiecePosition(promotionPawn)) {
-                piece.type = pieceType;
-                const teamType = (piece.team === TeamType.OUR) ? "w" : "b";
-                let image = "";
-                switch (pieceType) {
-                    case PieceType.ROOK: {
-                        image = "rook";
-                        break;
-                    }
-                    case PieceType.BISHOP: {
-                        image = "bishop";
-                        break;
-                    }
-                    case PieceType.KNIGHT: {
-                        image = "knight";
-                        break;
-                    }
-                    case PieceType.QUEEN: {
-                        image = "queen";
-                        break;
-                    }
+        setBoard(prev => {
+            const cloneBoard = board.copy();
+            cloneBoard.pieces = cloneBoard.pieces.reduce((results, piece) => {
+                if (piece.samePiecePosition(promotionPawn)) {
+                    results.push(new Piece(piece.position.clone(), pieceType,piece.team));
+                }else{
+                    results.push(piece);
                 }
-                piece.image = `assets/images/${teamType}_${image}.png`;
-            }
-            results.push(piece);
-            return results;
-        }, [] as Piece[])
+                return results;
+            }, [] as Piece[])
 
-        updatePossibleMoves();
+            cloneBoard.calculateAllMoves();
+            return cloneBoard;
+        })
+
         modalRef.current?.classList.add("hidden");
     }
 
