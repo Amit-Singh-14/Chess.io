@@ -6,11 +6,11 @@ export class Pawn extends Piece{
     enPassant?: boolean;
     
     constructor(position: Position , team: TeamType , enPassant? : boolean ,possibleMove : Position[] = []){
-       super(position, PieceType.PAWN,team);
+       super(position, PieceType.PAWN,team, possibleMove);
        this.enPassant = enPassant;
     }
 
     clone(): Pawn{
-        return new Pawn(this.position.clone(), this.team, this.enPassant, this.possibleMoves);
+        return new Pawn(this.position.clone(), this.team, this.enPassant, this.possibleMoves?.map(m => m.clone()));
     }
-}
+} 
