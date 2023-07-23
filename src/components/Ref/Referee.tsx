@@ -14,23 +14,17 @@ export default function Referee() {
   const modalRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    updatePossibleMoves();
+    board.calculateAllMoves();
   });
 
-  function updatePossibleMoves() {
-    board.calculateAllMoves();
-  }
-
   function playMove(playedPiece: Piece, destination: Position): boolean {
-    // console.log(playedPiece);
-
+    // if playing piece doesnt have any moves
     if (playedPiece.possibleMoves === undefined) return false;
-    // console.log("cheicng");
 
-    // prevent the inactive team to not make a move
-    //team turn
-    if (playedPiece.team === TeamType.OUR && !(board.totalTurn & 1)) return false;
-    if (playedPiece.team === TeamType.OPPONENT && board.totalTurn & 1) return false;
+    // prevent the inactive team from playing
+    // team turn
+    if (playedPiece.team === TeamType.OUR && board.totalTurn % 2 !== 1) return false;
+    if (playedPiece.team === TeamType.OPPONENT && board.totalTurn % 2 !== 0) return false;
 
     let playedMoveIsValid = false;
 
@@ -48,8 +42,8 @@ export default function Referee() {
     setBoard((prevBoard) => {
       // playing a move
       const cloneBoard = board.copy();
-      playedMoveIsValid = cloneBoard.playMove(validMove, enPassantMove, playedPiece, destination);
       cloneBoard.totalTurn += 1;
+      playedMoveIsValid = cloneBoard.playMove(validMove, enPassantMove, playedPiece, destination);
       return cloneBoard;
     });
 
