@@ -1,0 +1,9 @@
+{
+    "editor.formatOnSave": true,
+    "javascript.format.enable": true,
+    "javascript.format.insertSpaceAfterConstructor": true,
+    "javascript.format.insertSpaceAfterOpeningAndBeforeClosingJsxExpressionBraces": true,
+    "javascript.format.semicolons": "insert",
+    "typescript.format.insertSpaceBeforeFunctionParenthesis": true,
+    "typescript.format.semicolons": "insert"
+}
