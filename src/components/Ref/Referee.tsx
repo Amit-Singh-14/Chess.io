@@ -39,7 +39,7 @@ export default function Referee() {
       playedPiece.team
     );
 
-    setBoard((prevBoard) => {
+    setBoard(() => {
       // playing a move
       const cloneBoard = board.copy();
       cloneBoard.totalTurn += 1;
@@ -52,7 +52,8 @@ export default function Referee() {
 
     if (destination.y === promotionRow && playedPiece.isPawn) {
       modalRef.current?.classList.remove("hidden");
-      setPromotionPawn((prevPiece) => {
+
+      setPromotionPawn(() => {
         const clonePlayedPiece = playedPiece.clone();
         clonePlayedPiece.position = destination.clone();
         return clonePlayedPiece;
@@ -136,7 +137,7 @@ export default function Referee() {
       const cloneBoard = board.copy();
       cloneBoard.pieces = cloneBoard.pieces.reduce((results, piece) => {
         if (piece.samePiecePosition(promotionPawn)) {
-          results.push(new Piece(piece.position.clone(), pieceType, piece.team));
+          results.push(new Piece(piece.position.clone(), pieceType, piece.team, true));
         } else {
           results.push(piece);
         }
