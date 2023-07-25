@@ -1,6 +1,5 @@
 import { TeamType } from "../../../Types";
-import { Piece } from "../../../models/Piece";
-import { Position } from "../../../models/Position";
+import { Piece, Position } from "../../../models";
 import {
   tileIsEmptyOrOccupiedByOpponent,
   tileIsOccupied,
@@ -54,7 +53,7 @@ export const getPossibleRookMoves = (rook: Piece, boardstate: Piece[]): Position
 
   // Top movement
   for (let i = 1; i < 8; i++) {
-    // Stop cheking if move is outside of the board
+    // Stop checking if move is outside of the board
     if (rook.position.y + i > 7) break;
     const destination = new Position(rook.position.x, rook.position.y + i);
 
@@ -70,8 +69,9 @@ export const getPossibleRookMoves = (rook: Piece, boardstate: Piece[]): Position
 
   // Bottom movement
   for (let i = 1; i < 8; i++) {
-    // Stop cheking if move is outside of the board
+    // Stop checking if move is outside of the board
     if (rook.position.y - i < 0) break;
+
     const destination = new Position(rook.position.x, rook.position.y - i);
 
     if (!tileIsOccupied(destination, boardstate)) {
@@ -86,8 +86,9 @@ export const getPossibleRookMoves = (rook: Piece, boardstate: Piece[]): Position
 
   // Left movement
   for (let i = 1; i < 8; i++) {
-    // Stop cheking if move is outside of the board
+    // Stop checking if move is outside of the board
     if (rook.position.x - i < 0) break;
+
     const destination = new Position(rook.position.x - i, rook.position.y);
 
     if (!tileIsOccupied(destination, boardstate)) {
@@ -102,8 +103,9 @@ export const getPossibleRookMoves = (rook: Piece, boardstate: Piece[]): Position
 
   // Right movement
   for (let i = 1; i < 8; i++) {
-    // Stop cheking if move is outside of the board
+    // Stop checking if move is outside of the board
     if (rook.position.x + i > 7) break;
+
     const destination = new Position(rook.position.x + i, rook.position.y);
 
     if (!tileIsOccupied(destination, boardstate)) {
