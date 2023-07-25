@@ -6,6 +6,7 @@ import {
   getPossiblePawnMoves,
   getPossibleQueenMoves,
   getPossibleRookMoves,
+  getCastlingMoves,
 } from "../components/referee/rules";
 import { Pawn } from "./Pawn";
 import { Piece } from "./Piece";
@@ -13,35 +14,57 @@ import { Position } from "./Position";
 
 export class Board {
   pieces: Piece[];
-  totalTurn: number;
+  totalTurns: number;
+  winningTeam?: TeamType;
 
-  constructor(pieces: Piece[], totalTurn: number) {
+  constructor(pieces: Piece[], totalTurns: number) {
     this.pieces = pieces;
-    this.totalTurn = totalTurn;
+    this.totalTurns = totalTurns;
   }
 
   get currentTeam(): TeamType {
-    return this.totalTurn % 2 === 0 ? TeamType.OPPONENT : TeamType.OUR;
+    return this.totalTurns % 2 === 0 ? TeamType.OPPONENT : TeamType.OUR;
   }
 
   calculateAllMoves() {
+    // Calculate the moves of all the pieces
     for (const piece of this.pieces) {
       piece.possibleMoves = this.getValidMoves(piece, this.pieces);
     }
+
+    // Calculate castling moves
+    for (const king of this.pieces.filter((p) => p.isKing)) {
+      if (king.possibleMoves === undefined) continue;
+
+      king.possibleMoves = [...king.possibleMoves, ...getCastlingMoves(king, this.pieces)];
+    }
+
+    // Check if the current team moves are valid
     this.checkCurrentTeamMoves();
 
-    // Remove the possible moves for the team that is not playing
+    // Remove the posibble moves for the team that is not playing
     for (const piece of this.pieces.filter((p) => p.team !== this.currentTeam)) {
       piece.possibleMoves = [];
     }
+
+    // Check if the playing team still has moves left
+    // Otherwise, checkmate!
+    if (
+      this.pieces
+        .filter((p) => p.team === this.currentTeam)
+        .some((p) => p.possibleMoves !== undefined && p.possibleMoves.length > 0)
+    )
+      return;
+
+    this.winningTeam = this.currentTeam === TeamType.OUR ? TeamType.OPPONENT : TeamType.OUR;
   }
 
   checkCurrentTeamMoves() {
-    // loop through all the current team pieces
+    // Loop through all the current team's pieces
     for (const piece of this.pieces.filter((p) => p.team === this.currentTeam)) {
       if (piece.possibleMoves === undefined) continue;
 
-      //simulate all the piece moves
+      // Simulate all the piece moves
       for (const move of piece.possibleMoves) {
         const simulatedBoard = this.copy();
 
@@ -49,11 +72,11 @@ export class Board {
         simulatedBoard.pieces = simulatedBoard.pieces.filter((p) => !p.samePosition(move));
 
         // Get the piece of the cloned board
-        const clonePiece = simulatedBoard.pieces.find((p) => p.samePiecePosition(piece))!;
-        clonePiece.position = move.clone();
+        const clonedPiece = simulatedBoard.pieces.find((p) => p.samePiecePosition(piece))!;
+        clonedPiece.position = move.clone();
 
         // Get the king of the cloned board
-        const cloneKing = simulatedBoard.pieces.find(
+        const clonedKing = simulatedBoard.pieces.find(
           (p) => p.isKing && p.team === simulatedBoard.currentTeam
         )!;
 
@@ -67,13 +90,13 @@ export class Board {
           if (enemy.isPawn) {
             if (
               enemy.possibleMoves.some(
-                (m) => m.x !== enemy.position.x && m.samePosition(cloneKing.position)
+                (m) => m.x !== enemy.position.x && m.samePosition(clonedKing.position)
               )
             ) {
               piece.possibleMoves = piece.possibleMoves?.filter((m) => !m.samePosition(move));
             }
           } else {
-            if (enemy.possibleMoves.some((m) => m.samePosition(cloneKing.position))) {
+            if (enemy.possibleMoves.some((m) => m.samePosition(clonedKing.position))) {
               piece.possibleMoves = piece.possibleMoves?.filter((m) => !m.samePosition(move));
             }
           }
@@ -102,49 +125,47 @@ export class Board {
   }
 
   playMove(
-    validMove: boolean,
     enPassantMove: boolean,
+    validMove: boolean,
     playedPiece: Piece,
     destination: Position
   ): boolean {
-    console.log(playedPiece);
-
     const pawnDirection = playedPiece.team === TeamType.OUR ? 1 : -1;
+    const destinationPiece = this.pieces.find((p) => p.samePosition(destination));
+
+    // If the move is a castling move do this
+    if (
+      playedPiece.isKing &&
+      destinationPiece?.isRook &&
+      destinationPiece.team === playedPiece.team
+    ) {
+      const direction = destinationPiece.position.x - playedPiece.position.x > 0 ? 1 : -1;
+      const newKingXPosition = playedPiece.position.x + direction * 2;
+      this.pieces = this.pieces.map((p) => {
+        if (p.samePiecePosition(playedPiece)) {
+          p.position.x = newKingXPosition;
+        } else if (p.samePiecePosition(destinationPiece)) {
+          p.position.x = newKingXPosition - direction;
+        }
+
+        return p;
+      });
+
+      this.calculateAllMoves();
+      return true;
+    }
+
     if (enPassantMove) {
       this.pieces = this.pieces.reduce((results, piece) => {
         if (piece.samePiecePosition(playedPiece)) {
           if (piece.isPawn) (piece as Pawn).enPassant = false;
           piece.position.x = destination.x;
           piece.position.y = destination.y;
+          piece.hasMoved = true;
           results.push(piece);
         } else if (
           !piece.samePosition(new Position(destination.x, destination.y - pawnDirection))
         ) {
-          if (piece.type === PieceType.PAWN) {
-            (piece as Pawn).enPassant = false;
-          }
-          results.push(piece);
-        }
-
-        return results;
-      }, [] as Piece[]);
-
-      this.calculateAllMoves();
-      return true;
-    } else if (validMove) {
-      //UPDATES THE PIECE POSITION
-      //AND IF A PIECE IS ATTACKED, REMOVES IT
-      this.pieces = this.pieces.reduce((results, piece) => {
-        if (piece.samePiecePosition(playedPiece)) {
-          //SPECIAL MOVE
-          (piece as Pawn).enPassant =
-            Math.abs(playedPiece.position.y - destination.y) === 2 && piece.isPawn;
-
-          piece.position.x = destination.x;
-          piece.position.y = destination.y;
-
-          results.push(piece);
-        } else if (!piece.samePosition(destination)) {
           if (piece.isPawn) {
             (piece as Pawn).enPassant = false;
           }
@@ -155,16 +176,45 @@ export class Board {
       }, [] as Piece[]);
 
       this.calculateAllMoves();
-      return true;
+    } else if (validMove) {
+      //UPDATES THE PIECE POSITION
+      //AND IF A PIECE IS ATTACKED, REMOVES IT
+      this.pieces = this.pieces.reduce((results, piece) => {
+        // Piece that we are currently moving
+        if (piece.samePiecePosition(playedPiece)) {
+          //SPECIAL MOVE
+          if (piece.isPawn)
+            (piece as Pawn).enPassant =
+              Math.abs(playedPiece.position.y - destination.y) === 2 &&
+              piece.type === PieceType.PAWN;
+          piece.position.x = destination.x;
+          piece.position.y = destination.y;
+          piece.hasMoved = true;
+          results.push(piece);
+        } else if (!piece.samePosition(destination)) {
+          if (piece.isPawn) {
+            (piece as Pawn).enPassant = false;
+          }
+          results.push(piece);
+        }
+
+        // The piece at the destination location
+        // Won't be pushed in the results
+        return results;
+      }, [] as Piece[]);
+
+      this.calculateAllMoves();
     } else {
       return false;
     }
+
+    return true;
   }
 
   copy(): Board {
     return new Board(
       this.pieces.map((p) => p.clone()),
-      this.totalTurn
+      this.totalTurns
     );
   }
 }
