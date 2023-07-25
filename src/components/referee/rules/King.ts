@@ -44,6 +44,9 @@ export const getPossibleKingMoves = (king: Piece, boardstate: Piece[]): Position
   for (let i = 1; i < 2; i++) {
     const destination = new Position(king.position.x, king.position.y + i);
 
+    // if the move is outside of the boundary dont add it
+    // if (destination.x < 0 || destination.x > 7 || destination.y < 0 || destination.y > 7) break;
+
     if (!tileIsOccupied(destination, boardstate)) {
       possibleMoves.push(destination);
     } else if (tileIsOccupiedByOpponent(destination, boardstate, king.team)) {
@@ -57,6 +60,8 @@ export const getPossibleKingMoves = (king: Piece, boardstate: Piece[]): Position
   // Bottom movement
   for (let i = 1; i < 2; i++) {
     const destination: Position = new Position(king.position.x, king.position.y - i);
+    // if the move is outside of the boundary dont add it
+    // if (destination.x < 0 || destination.x > 7 || destination.y < 0 || destination.y > 7) break;
 
     if (!tileIsOccupied(destination, boardstate)) {
       possibleMoves.push(destination);
@@ -71,6 +76,9 @@ export const getPossibleKingMoves = (king: Piece, boardstate: Piece[]): Position
   // Left movement
   for (let i = 1; i < 2; i++) {
     const destination = new Position(king.position.x - i, king.position.y);
+    // if the move is outside of the boundary dont add it
+    // if (destination.x < 0 || destination.x > 7 || destination.y < 0 || destination.y > 7) break;
+
     if (!tileIsOccupied(destination, boardstate)) {
       possibleMoves.push(destination);
     } else if (tileIsOccupiedByOpponent(destination, boardstate, king.team)) {
@@ -84,6 +92,8 @@ export const getPossibleKingMoves = (king: Piece, boardstate: Piece[]): Position
   // Right movement
   for (let i = 1; i < 2; i++) {
     const destination = new Position(king.position.x + i, king.position.y);
+    // if the move is outside of the boundary dont add it
+    // if (destination.x < 0 || destination.x > 7 || destination.y < 0 || destination.y > 7) break;
 
     if (!tileIsOccupied(destination, boardstate)) {
       possibleMoves.push(destination);
@@ -98,6 +108,8 @@ export const getPossibleKingMoves = (king: Piece, boardstate: Piece[]): Position
   // Upper right movement
   for (let i = 1; i < 2; i++) {
     const destination = new Position(king.position.x + i, king.position.y + i);
+    // if the move is outside of the boundary dont add it
+    if (destination.x < 0 || destination.x > 7 || destination.y < 0 || destination.y > 7) break;
 
     if (!tileIsOccupied(destination, boardstate)) {
       possibleMoves.push(destination);
@@ -112,6 +124,8 @@ export const getPossibleKingMoves = (king: Piece, boardstate: Piece[]): Position
   // Bottom right movement
   for (let i = 1; i < 2; i++) {
     const destination = new Position(king.position.x + i, king.position.y - i);
+    // if the move is outside of the boundary dont add it
+    if (destination.x < 0 || destination.x > 7 || destination.y < 0 || destination.y > 7) break;
 
     if (!tileIsOccupied(destination, boardstate)) {
       possibleMoves.push(destination);
@@ -126,6 +140,8 @@ export const getPossibleKingMoves = (king: Piece, boardstate: Piece[]): Position
   // Bottom left movement
   for (let i = 1; i < 2; i++) {
     const destination: Position = new Position(king.position.x - i, king.position.y - i);
+    // if the move is outside of the boundary dont add it
+    if (destination.x < 0 || destination.x > 7 || destination.y < 0 || destination.y > 7) break;
 
     if (!tileIsOccupied(destination, boardstate)) {
       possibleMoves.push(destination);
@@ -140,6 +156,8 @@ export const getPossibleKingMoves = (king: Piece, boardstate: Piece[]): Position
   // Top left movement
   for (let i = 1; i < 2; i++) {
     const destination = new Position(king.position.x - i, king.position.y + i);
+    // if the move is outside of the boundary dont add it
+    if (destination.x < 0 || destination.x > 7 || destination.y < 0 || destination.y > 7) break;
 
     if (!tileIsOccupied(destination, boardstate)) {
       possibleMoves.push(destination);
@@ -157,13 +175,15 @@ export const getPossibleKingMoves = (king: Piece, boardstate: Piece[]): Position
 // in this method eneny have been allready calculated
 export const getCastlingMoves = (king: Piece, boardState: Piece[]): Position[] => {
   const possibleMoves: Position[] = [];
-
   if (king.hasMoved) return possibleMoves;
 
+  // We get the rooks from the king's team which haven't moved
   const rooks = boardState.filter((p) => p.isRook && p.team === king.team && !p.hasMoved);
 
+  // Loop through the rooks
   for (const rook of rooks) {
     const direction = rook.position.x - king.position.x > 0 ? 1 : -1;
+
     const adjacentPosition = king.position.clone();
     adjacentPosition.x += direction;
 

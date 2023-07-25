@@ -15,6 +15,7 @@ import { Position } from "./Position";
 export class Board {
   pieces: Piece[];
   totalTurn: number;
+  winningTeam?: TeamType;
 
   constructor(pieces: Piece[], totalTurn: number) {
     this.pieces = pieces;
@@ -36,6 +37,7 @@ export class Board {
 
       king.possibleMoves = [...king.possibleMoves, ...getCastlingMoves(king, this.pieces)];
     }
+    console.log(this.pieces.filter((p) => p.isKing));
 
     // if the current team moves are valid / if king danger cant move
     this.checkCurrentTeamMoves();
@@ -44,6 +46,17 @@ export class Board {
     for (const piece of this.pieces.filter((p) => p.team !== this.currentTeam)) {
       piece.possibleMoves = [];
     }
+
+    // check if the playing team still has moves left
+    // otherwize checkmate!!
+
+    if (
+      this.pieces
+        .filter((p) => p.team === this.currentTeam)
+        .some((p) => p.possibleMoves !== undefined && p.possibleMoves.length > 0)
+    )
+      return;
+    this.winningTeam = this.currentTeam === TeamType.OUR ? TeamType.OPPONENT : TeamType.OUR;
   }
 
   checkCurrentTeamMoves() {
@@ -117,9 +130,28 @@ export class Board {
     playedPiece: Piece,
     destination: Position
   ): boolean {
-    console.log(playedPiece);
-
     const pawnDirection = playedPiece.team === TeamType.OUR ? 1 : -1;
+
+    // if the move is a castling move do this
+    const destinationPiece = this.pieces.find((p) => p.samePosition(destination));
+    if (
+      playedPiece.isKing &&
+      destinationPiece?.isRook &&
+      destinationPiece.team === playedPiece.team
+    ) {
+      const direction = destinationPiece.position.x - playedPiece.position.x > 0 ? 1 : -1;
+      const newKingXPositon = playedPiece.position.x + direction * 2;
+      this.pieces = this.pieces.map((p) => {
+        if (p.samePiecePosition(playedPiece)) {
+          p.position.x = newKingXPositon;
+        } else if (p.samePiecePosition(destinationPiece)) {
+          p.position.x = newKingXPositon - direction;
+        }
+        return p;
+      });
+      this.calculateAllMoves();
+      return true;
+    }
 
     if (enPassantMove) {
       this.pieces = this.pieces.reduce((results, piece) => {

@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { initialBoard } from "../../Constants";
 import { bishopMove, kingMove, knightMove, pawnMove, queenMove, rookMove } from "../referee/rules";
 import Chessboard from "../chessBoard/ChessBoard";
@@ -9,13 +9,10 @@ import { Pawn } from "../../models/Pawn";
 import { Board } from "../../models/Board";
 
 export default function Referee() {
-  const [board, setBoard] = useState<Board>(initialBoard);
+  const [board, setBoard] = useState<Board>(initialBoard.copy());
   const [promotionPawn, setPromotionPawn] = useState<Piece>();
   const modalRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    board.calculateAllMoves();
-  });
+  const checkMaateModalRef = useRef<HTMLDivElement>(null);
 
   function playMove(playedPiece: Piece, destination: Position): boolean {
     // if playing piece doesnt have any moves
@@ -27,7 +24,6 @@ export default function Referee() {
     if (playedPiece.team === TeamType.OPPONENT && board.totalTurn % 2 !== 0) return false;
 
     let playedMoveIsValid = false;
-
     const validMove = playedPiece.possibleMoves?.some((m) => m.samePosition(destination));
 
     if (!validMove) return false;
@@ -43,7 +39,14 @@ export default function Referee() {
       // playing a move
       const cloneBoard = board.copy();
       cloneBoard.totalTurn += 1;
+
       playedMoveIsValid = cloneBoard.playMove(validMove, enPassantMove, playedPiece, destination);
+
+      if (cloneBoard.winningTeam !== undefined) {
+        console.log(cloneBoard.winningTeam);
+
+        checkMaateModalRef.current?.classList.remove("hidden");
+      }
       return cloneBoard;
     });
 
@@ -155,12 +158,17 @@ export default function Referee() {
     return promotionPawn?.team === TeamType.OUR ? "w" : "b";
   }
 
+  function restart() {
+    checkMaateModalRef.current?.classList.add("hidden");
+    setBoard(initialBoard.copy());
+  }
+
   // 1 -> white turn
   // 2 -> black turn
   return (
     <>
       <p style={{ color: "white", fontSize: "24px" }}>{board.totalTurn}</p>
-      <div id="pawn-promotion-modal" className="hidden" ref={modalRef}>
+      <div className="modal hidden" ref={modalRef}>
         <div className="modal-body">
           <img
             onClick={() => promotePawn(PieceType.ROOK)}
@@ -182,6 +190,16 @@ export default function Referee() {
             src={`/assets/images/${promotionTeamType()}_queen.png`}
             alt=""
           />
+        </div>
+      </div>
+      <div className="modal hidden" ref={checkMaateModalRef}>
+        <div className="modal-body">
+          <div className="checkmate-body">
+            <span>
+              The Winning team is {board.winningTeam === TeamType.OUR ? "White" : "Black"}!{" "}
+            </span>
+            <button onClick={restart}>Play Again</button>
+          </div>
         </div>
       </div>
       <Chessboard playMove={playMove} pieces={board.pieces} />
