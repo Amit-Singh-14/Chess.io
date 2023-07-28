@@ -1,0 +1,43 @@
+.heading > h1 {
+  font-size: 150px;
+  color: white;
+}
+
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  height: inherit;
+  justify-content: space-around;
+}
+
+.heading {
+  color: aliceblue;
+}
+
+.play {
+  color: white;
+  font-size: 30px;
+}
+
+.multi {
+  color: white;
+  font-size: 20px;
+  text-align: end;
+}
+
+.sidebar > button {
+  padding: 20px;
+  font-size: 40px;
+  cursor: pointer;
+  color: white;
+  border-radius: 5px;
+  border: none;
+  text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
+}
+#online {
+  background-color: #779556;
+}
+
+#offline {
+  background-color: #ebecd0;
+}
