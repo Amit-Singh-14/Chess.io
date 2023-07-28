@@ -1,34 +1,30 @@
 import { useRef, useState } from "react";
 import "./chessBoard.css";
 import Tile from "../tiles/Tile";
-import {
-  VERTICAL_AXIS,
-  HORIZONTAL_AXIS,
-  GRID_SIZE,
-} from "../../Constants";
+import { VERTICAL_AXIS, HORIZONTAL_AXIS, GRID_SIZE } from "../../Constants";
 import { Piece } from "../../models/Piece";
 import { Position } from "../../models/Position";
-
 
 interface Props {
   playMove: (piece: Piece, position: Position) => boolean;
   pieces: Piece[];
 }
-export default function Chessboard({playMove, pieces} : Props) {
+export default function Chessboard({ playMove, pieces }: Props) {
   const [activePiece, setActivePiece] = useState<HTMLElement | null>(null);
-  const [grabPosition, setGrabPosition] = useState<Position>(new Position(-1,-1));
+  const [grabPosition, setGrabPosition] = useState<Position>(new Position(-1, -1));
   const chessboardRef = useRef<HTMLDivElement>(null);
- 
 
   function grabPiece(e: React.MouseEvent) {
     const element = e.target as HTMLElement;
     const chessboard = chessboardRef.current;
     if (element.classList.contains("chess-piece") && chessboard) {
+      console.log(chessboard.offsetLeft, chessboard.offsetTop);
+
       const grabX = Math.floor((e.clientX - chessboard.offsetLeft) / GRID_SIZE);
-      const grabY = Math.abs(
-        Math.ceil((e.clientY - chessboard.offsetTop - 600) / GRID_SIZE)
-      );
-      setGrabPosition(new Position(grabX,grabY));
+      const grabY = Math.abs(Math.ceil((e.clientY - chessboard.offsetTop - 600) / GRID_SIZE));
+      console.log(grabX, grabY);
+
+      setGrabPosition(new Position(grabX, grabY));
       const x = e.clientX - GRID_SIZE / 2;
       const y = e.clientY - GRID_SIZE / 2;
       element.style.position = "absolute";
@@ -78,19 +74,14 @@ export default function Chessboard({playMove, pieces} : Props) {
 
     if (activePiece && chessboard) {
       const x = Math.floor((e.clientX - chessboard.offsetLeft) / GRID_SIZE);
-      const y = Math.abs(
-        Math.ceil((e.clientY - chessboard.offsetTop - 600) / GRID_SIZE)
-      );
+      const y = Math.abs(Math.ceil((e.clientY - chessboard.offsetTop - 600) / GRID_SIZE));
 
-      const currentPiece = pieces.find((p) =>
-        p.position.samePosition( grabPosition)
-      );
+      const currentPiece = pieces.find((p) => p.position.samePosition(grabPosition));
 
       if (currentPiece) {
-        
-        var succes = playMove(currentPiece.clone(), new Position(x,y));
+        var succes = playMove(currentPiece.clone(), new Position(x, y));
 
-        if(!succes) {
+        if (!succes) {
           //RESETS THE PIECE POSITION
           activePiece.style.position = "relative";
           activePiece.style.removeProperty("top");
@@ -103,34 +94,33 @@ export default function Chessboard({playMove, pieces} : Props) {
 
   let board = [];
   // inserting the pieces in correct order according to the cordinates in the board array to render
-   for (let j = VERTICAL_AXIS.length - 1; j >= 0; j--) {
+  for (let j = VERTICAL_AXIS.length - 1; j >= 0; j--) {
     for (let i = 0; i < HORIZONTAL_AXIS.length; i++) {
       const number = j + i + 2;
-      const piece = pieces.find((p) =>
-        p.samePosition( new Position(i,j))
-      );
+      const piece = pieces.find((p) => p.samePosition(new Position(i, j)));
       let image = piece ? piece.image : undefined;
 
-      let currentPiece = activePiece != null ? pieces.find(p => p.position.samePosition( grabPosition)) : undefined;
+      let currentPiece =
+        activePiece != null ? pieces.find((p) => p.position.samePosition(grabPosition)) : undefined;
 
-      let highlight = currentPiece?.possibleMoves ? 
-      currentPiece.possibleMoves.some(p => p.samePosition(new Position(i,j))) : false;
+      let highlight = currentPiece?.possibleMoves
+        ? currentPiece.possibleMoves.some((p) => p.samePosition(new Position(i, j)))
+        : false;
       board.push(<Tile key={`${j},${i}`} image={image} number={number} highlight={highlight} />);
     }
   }
-  
+
   return (
     <>
-    <div
-    onMouseMove={(e) => movePiece(e)}
-    onMouseDown={(e) => grabPiece(e)}
-    onMouseUp={(e) => dropPiece(e)}
-    id="chessboard"
-    ref={chessboardRef}
-  >
-    {board}
-  </div>
-</>
-);
+      <div
+        onMouseMove={(e) => movePiece(e)}
+        onMouseDown={(e) => grabPiece(e)}
+        onMouseUp={(e) => dropPiece(e)}
+        id="chessboard"
+        ref={chessboardRef}
+      >
+        {board}
+      </div>
+    </>
+  );
 }
-
