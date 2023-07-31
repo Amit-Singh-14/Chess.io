@@ -1,19 +1,28 @@
+import React from "react";
+import { BiUser } from "react-icons/bi";
+import { RiLockPasswordLine } from "react-icons/ri";
 import "./login.css";
-function Login({ disable }) {
-  function handleclick() {
-    disable.current.classList.add("hidden");
-  }
+function Login() {
   return (
-    <div className="sidebar">
-      <div className="heading">
-        <h1>Chess.io</h1>
-        <p className="play">Play chess online</p>
-        <p className="multi">multiplayer game !!!!</p>
+    <div className="login hidden">
+      <div className="login-form">
+        <h1>LOGIN</h1>
+        <form action="">
+          <div className="user input">
+            <BiUser fontSize={20} />
+            <input type="text" placeholder="username" />
+          </div>
+          <div className="pass input">
+            <RiLockPasswordLine fontSize={20} />
+            <input type="text" placeholder="username" />
+          </div>
+          <button className="login-into">Login</button>
+        </form>
       </div>
-      <button id="online" onClick={handleclick}>
-        play Online
-      </button>
-      <button id="offline">play offfline 1v1</button>
+      <div className="signup">
+        <p>new user...??</p>
+        <button>signUp</button>
+      </div>
     </div>
   );
 }

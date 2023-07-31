@@ -5,9 +5,16 @@
   flex-direction: row;
   justify-content: space-around;
   align-items: center;
+  position: relative;
+}
+.blur {
+  overflow: hidden;
+  transition: 0.5s;
+  -webkit-filter: blur(4px);
+  filter: blur(4px);
 }
 
-.login {
+.startup {
   height: 80vh;
 }
 

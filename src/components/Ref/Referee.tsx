@@ -174,26 +174,29 @@ export default function Referee() {
 
   return (
     <>
-      <p style={{ color: "white", fontSize: "24px", textAlign: "center" }}>
-        Total turns: {board.totalTurns}
-      </p>
       <div className="modal hidden" ref={modalRef}>
         <div className="modal-body">
           <img
             onClick={() => promotePawn(PieceType.ROOK)}
             src={`/assets/images/rook_${promotionTeamType()}.png`}
+            alt=""
           />
           <img
             onClick={() => promotePawn(PieceType.BISHOP)}
             src={`/assets/images/bishop_${promotionTeamType()}.png`}
+            alt=""
           />
+
           <img
             onClick={() => promotePawn(PieceType.KNIGHT)}
             src={`/assets/images/knight_${promotionTeamType()}.png`}
+            alt=""
           />
+
           <img
             onClick={() => promotePawn(PieceType.QUEEN)}
             src={`/assets/images/queen_${promotionTeamType()}.png`}
+            alt=""
           />
         </div>
       </div>
@@ -207,6 +210,9 @@ export default function Referee() {
           </div>
         </div>
       </div>
+      {/* <p style={{ color: "white", fontSize: "24px", textAlign: "center" }}>
+        Total turns: {board.totalTurns}
+      </p> */}
       <Chessboard playMove={playMove} pieces={board.pieces} />
     </>
   );
