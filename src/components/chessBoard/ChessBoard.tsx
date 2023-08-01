@@ -21,7 +21,7 @@ export default function Chessboard({ playMove, pieces }: Props) {
       console.log(chessboard.offsetLeft, chessboard.offsetTop);
 
       const grabX = Math.floor((e.clientX - chessboard.offsetLeft) / GRID_SIZE);
-      const grabY = Math.abs(Math.ceil((e.clientY - chessboard.offsetTop - 600) / GRID_SIZE));
+      const grabY = Math.abs(Math.ceil((e.clientY - chessboard.offsetTop - 720) / GRID_SIZE));
       console.log(grabX, grabY);
 
       setGrabPosition(new Position(grabX, grabY));
@@ -74,7 +74,7 @@ export default function Chessboard({ playMove, pieces }: Props) {
 
     if (activePiece && chessboard) {
       const x = Math.floor((e.clientX - chessboard.offsetLeft) / GRID_SIZE);
-      const y = Math.abs(Math.ceil((e.clientY - chessboard.offsetTop - 600) / GRID_SIZE));
+      const y = Math.abs(Math.ceil((e.clientY - chessboard.offsetTop - 720) / GRID_SIZE));
 
       const currentPiece = pieces.find((p) => p.position.samePosition(grabPosition));
 

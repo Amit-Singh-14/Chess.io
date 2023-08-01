@@ -1,15 +1,15 @@
 .tile {
   display: grid;
   place-content: center;
-  width: 75px;
-  height: 75px;
+  width: 90px;
+  height: 90px;
 }
 .tile .chess-piece {
-  width: 75px;
-  height: 75px;
+  width: 90px;
+  height: 90px;
   background-repeat: no-repeat;
   background-position: center;
-  background-size: 50px;
+  background-size: 60px;
 }
 .tile .chess-piece:hover {
   cursor: grab;
