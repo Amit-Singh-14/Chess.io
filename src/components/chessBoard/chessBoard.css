@@ -1,9 +1,9 @@
 #chessboard {
   display: grid;
-  grid-template-columns: repeat(8, 75px);
-  grid-template-rows: repeat(8, 75px);
-  width: 600px;
-  height: 600px;
+  grid-template-columns: repeat(8, 90px);
+  grid-template-rows: repeat(8, 90px);
+  width: 720px;
+  height: 720px;
 }
 .modal {
   position: absolute;

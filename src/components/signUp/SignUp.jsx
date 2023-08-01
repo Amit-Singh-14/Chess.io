@@ -1,21 +1,21 @@
 import { BiUser } from "react-icons/bi";
 import { RiLockPasswordLine } from "react-icons/ri";
-import "./login.css";
-function Login({ setToggle, setGameStart }) {
+import "./signup.css";
+function SignUp({ setGameStart }) {
   const handleLogin = () => {
     document.querySelector(".App").classList.remove("blur");
     setGameStart(true);
   };
 
-  const handleSignUp = () => {
-    setToggle(false);
-  };
-
   return (
-    <div className="login hidden">
-      <div className="login-form">
-        <h1>LOGIN</h1>
+    <div className="sign">
+      <div className="sign-form">
+        <h1>Sign Up</h1>
         <form action="">
+          <div className="email input">
+            <BiUser fontSize={20} />
+            <input type="email" placeholder="email address" />
+          </div>
           <div className="user input">
             <BiUser fontSize={20} />
             <input type="text" placeholder="username" />
@@ -24,17 +24,13 @@ function Login({ setToggle, setGameStart }) {
             <RiLockPasswordLine fontSize={20} />
             <input type="text" placeholder="username" />
           </div>
-          <button className="login-into" onClick={handleLogin}>
-            Login
+          <button className="signup-into" onClick={handleLogin}>
+            SignUp
           </button>
         </form>
-      </div>
-      <div className="signup">
-        <p>new user...??</p>
-        <button onClick={handleSignUp}>signUp</button>
       </div>
     </div>
   );
 }
 
-export default Login;
+export default SignUp;

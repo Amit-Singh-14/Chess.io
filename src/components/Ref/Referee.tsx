@@ -19,8 +19,14 @@ import {
 } from "../../components/referee/rules";
 import { PieceType, TeamType } from "../../Types";
 import Chessboard from "../chessBoard/ChessBoard";
+import Players1 from "../Player/Players1";
+import Player2 from "../Player/Player2";
 
-export default function Referee() {
+interface props {
+  gameStart: boolean;
+}
+
+export default function Referee({ gameStart }: props) {
   const [board, setBoard] = useState<Board>(initialBoard.copy());
   const [promotionPawn, setPromotionPawn] = useState<Piece>();
   const modalRef = useRef<HTMLDivElement>(null);
@@ -178,24 +184,24 @@ export default function Referee() {
         <div className="modal-body">
           <img
             onClick={() => promotePawn(PieceType.ROOK)}
-            src={`/assets/images/rook_${promotionTeamType()}.png`}
+            src={`/assets/images/${promotionTeamType()}_rook.png`}
             alt=""
           />
           <img
             onClick={() => promotePawn(PieceType.BISHOP)}
-            src={`/assets/images/bishop_${promotionTeamType()}.png`}
+            src={`/assets/images/${promotionTeamType()}_bishop.png`}
             alt=""
           />
 
           <img
             onClick={() => promotePawn(PieceType.KNIGHT)}
-            src={`/assets/images/knight_${promotionTeamType()}.png`}
+            src={`/assets/images/${promotionTeamType()}_knight.png`}
             alt=""
           />
 
           <img
             onClick={() => promotePawn(PieceType.QUEEN)}
-            src={`/assets/images/queen_${promotionTeamType()}.png`}
+            src={`/assets/images/${promotionTeamType()}_queen.png`}
             alt=""
           />
         </div>
@@ -213,7 +219,10 @@ export default function Referee() {
       {/* <p style={{ color: "white", fontSize: "24px", textAlign: "center" }}>
         Total turns: {board.totalTurns}
       </p> */}
+
+      {gameStart && <Player2 />}
       <Chessboard playMove={playMove} pieces={board.pieces} />
+      {gameStart && <Players1 />}
     </>
   );
 }

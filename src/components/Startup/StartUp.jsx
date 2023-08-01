@@ -1,13 +1,14 @@
 import "./startup.css";
-function StartUp({ disable }) {
+function StartUp({ disable, setGameStart }) {
   function handleclick() {
     disable.current.classList.add("hidden");
+    setGameStart(true);
   }
 
   function blurBackground() {
     document.querySelector(".App").classList.add("blur");
     setTimeout(() => {
-      document.querySelector(".login").classList.remove("hidden");
+      document.querySelector(".login")?.classList.remove("hidden");
     }, 500);
   }
   return (
